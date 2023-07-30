@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -16,6 +18,9 @@
   --app-gray-800: 31 41 55;
   --app-gray-900: 17 24 39;
   --app-gray-950: 3 7 18;
+
+  /* Text */
+  --logo-text: 'Goldman', cursive;
 }
 
 .dark {
@@ -31,4 +36,9 @@
   --app-gray-800: 243 244 246;
   --app-gray-900: 249 250 251;
   --app-gray-950: 255 255 255;
+}
+
+.logo-text{
+  font-family: var(--logo-text);
+  font-weight: 700;
 }

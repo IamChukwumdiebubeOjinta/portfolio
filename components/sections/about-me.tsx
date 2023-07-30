@@ -1,11 +1,11 @@
-import Image from 'next/image';
+import Image from "next/image";
 
-import SagarFullPose from '/public/images/sagar-full-pose.jpg';
-import Tag from '@/components/data-display/tag';
-import Container from '@/components/layout/container';
-import Typography from '@/components/general/typography';
-import Link from '@/components/navigation/link';
-import { EXTERNAL_LINKS } from '@/lib/data';
+import EbubeFullPose from "/public/images/ebube.jpg";
+import Tag from "@/components/data-display/tag";
+import Container from "@/components/layout/container";
+import Typography from "@/components/general/typography";
+import Link from "@/components/navigation/link";
+import { EXTERNAL_LINKS } from "@/lib/data";
 
 const AboutMeSection = () => {
   return (
@@ -19,11 +19,11 @@ const AboutMeSection = () => {
         <div className="flex justify-center md:order-first md:justify-end">
           <div className="relative h-[380px] w-[320px] md:h-[460px] md:w-[380px] lg:h-[520px] lg:w-[440px]">
             <Image
-              src={SagarFullPose}
-              alt="Fullpose of Sagar"
-              className="absolute z-10 h-[360px] w-[280px] border-8 border-gray-50 max-md:left-5 md:right-0 md:top-0 md:h-[420px] md:w-[340px] lg:h-[480px] lg:w-[400px]"
-              style={{ objectFit: 'cover' }}
-            ></Image>
+              src={EbubeFullPose}
+              alt="Fullpose of Ebube"
+              className="absolute z-10 h-[360px] max-w-[280px] w-full border-8 border-gray-50 max-md:left-5 md:right-0 md:top-0 md:h-[420px] md:max-w-[340px] lg:h-[480px] lg:max-w-[400px]"
+              style={{ objectFit: "fill" }}
+            />
             <div className="absolute h-[360px] w-[320px] border-8 border-transparent bg-gray-200 max-md:top-5 md:bottom-0 md:left-0 md:h-[420px] md:w-[340px] lg:h-[480px] lg:w-[400px]"></div>
           </div>
         </div>
@@ -34,7 +34,7 @@ const AboutMeSection = () => {
             Curious about me? Here you have it:
           </Typography>
           <Typography>
-            I&apos;m a passionate,{' '}
+            I&apos;m a passionate,{" "}
             <Link
               noCustomization
               externalLink
@@ -42,7 +42,7 @@ const AboutMeSection = () => {
               href={EXTERNAL_LINKS.FIGMA}
             >
               self-proclaimed designer
-            </Link>{' '}
+            </Link>{" "}
             who specializes in full stack development (React.js & Node.js). I am
             enthusiastic about bringing the technical and visual aspects of
             digital products to life. User experience, pixel perfect design, and
@@ -65,7 +65,7 @@ const AboutMeSection = () => {
             When I&apos;m not in full-on developer mode, you can find me
             hovering around on twitter or on indie hacker, witnessing the
             journey of early startups or enjoying some free time. You can follow
-            me on{' '}
+            me on{" "}
             <Link
               noCustomization
               externalLink
@@ -73,9 +73,9 @@ const AboutMeSection = () => {
               href={EXTERNAL_LINKS.TWITTER}
             >
               Twitter
-            </Link>{' '}
+            </Link>{" "}
             where I share tech-related bites and build in public, or you can
-            follow me on{' '}
+            follow me on{" "}
             <Link
               noCustomization
               externalLink

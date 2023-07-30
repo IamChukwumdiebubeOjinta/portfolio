@@ -1,4 +1,4 @@
-import { Github, Twitter, Figma } from 'lucide-react';
+import { Github, Twitter, Mail, Linkedin } from 'lucide-react';
 
 import LogoJavascript from '/public/images/logos/icon-javascript.svg';
 import LogoTypescript from '/public/images/logos/icon-typescript.svg';
@@ -71,16 +71,20 @@ export const NAV_LINKS = [
 
 export const SOCIAL_LINKS = [
   {
+    icon: Mail,
+    url: 'https://github.com/IamChukwumdiebubeOjinta',
+  },
+  {
+    icon: Linkedin,
+    url: 'https://github.com/IamChukwumdiebubeOjinta',
+  },
+  {
     icon: Github,
-    url: 'https://github.com/shahsagarm',
+    url: 'https://github.com/IamChukwumdiebubeOjinta',
   },
   {
     icon: Twitter,
     url: 'https://twitter.com/shahsagarm',
-  },
-  {
-    icon: Figma,
-    url: 'https://www.figma.com/@shahsagarm',
   },
 ];
 

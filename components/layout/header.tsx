@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Menu, X } from 'lucide-react';
-
+import { useTheme } from 'next-themes';
 import {
   Drawer,
   DrawerTrigger,
@@ -19,11 +19,17 @@ import IconButton from '@/components/general/icon-button';
 import DownloadCV from '@/components/general/download-cv';
 import Typography from '@/components/general/typography';
 
-const Logo = () => (
-  <Typography variant="h3" className="font-bold">
+const Logo = () => {
+  const { theme, setTheme } = useTheme();
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+
+  return(
+  <Typography variant="h2" className="font-bold logo-text">
     {'<Ebube />'}
   </Typography>
-);
+)};
 
 const Header = () => {
   const scrolled = useScroll(40);
