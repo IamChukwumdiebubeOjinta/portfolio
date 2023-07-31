@@ -30,42 +30,38 @@ const AboutMeSection = () => {
 
         {/* Content */}
         <div className="flex max-w-xl flex-col gap-6">
-          <Typography variant="h3">
-            Curious about me? Here you have it:
+          <Typography variant="h3">Curiosity piqued?</Typography>
+          <Typography className="text-justify">
+            I&apos;m Chukwumdiebube Ojinta, a passionate and design-oriented
+            frontend developer with 2+ years of experience and a year of work
+            experience, currently located in Enugu, Nigeria. My expertise lies
+            in full-stack development, focusing on React.js and Node.js. I find
+            immense joy in bringing both the technical and visual aspects of
+            digital products to life, emphasizing user experience, pixel-perfect
+            design, and writing clean, high-performant code.
           </Typography>
-          <Typography>
-            I&apos;m a passionate,{" "}
-            <Link
-              noCustomization
-              externalLink
-              withUnderline
-              href={EXTERNAL_LINKS.FIGMA}
-            >
-              self-proclaimed designer
-            </Link>{" "}
-            who specializes in full stack development (React.js & Node.js). I am
-            enthusiastic about bringing the technical and visual aspects of
-            digital products to life. User experience, pixel perfect design, and
-            writing clear, readable, highly performant code matters to me.
+          <Typography className="text-justify">
+            Throughout my journey as a web developer, I&apos;ve been driven by a
+            relentless passion for creating exceptional digital products. From
+            my early days at Digital Links in Nigeria, where I started in IT, to
+            honing my skills at this level, I have always been drawn to the
+            world of web development and design.
           </Typography>
-          <Typography>
-            I began my journey as a web developer in 2015, and since then,
-            I&apos;ve continued to grow and evolve as a developer, taking on new
-            challenges and learning the latest technologies along the way. Now,
-            in my early thirties, 7 years after starting my web development
-            journey, I&apos;m building cutting-edge web applications using
-            modern technologies such as Next.js, TypeScript, Nestjs,
-            Tailwindcss, Supabase and much more.
+          <Typography className="text-justify">
+            One of my proudest moments was leading the frontend team in a
+            hackathon by the AfricaPlan Foundation, where our MERN stack project
+            earned us the Award for Innovation. This experience taught me the
+            value of effective communication and teamwork.
           </Typography>
-          <Typography>
-            I am very much a progressive thinker and enjoy working on products
-            end to end, from ideation all the way to development.
+
+          <Typography className="text-justify">
+            Following my internship with a company in the US, I gained hands-on
+            experience with dockerized apps and built real-world web
+            applications while refining my optimization techniques..
           </Typography>
-          <Typography>
-            When I&apos;m not in full-on developer mode, you can find me
-            hovering around on twitter or on indie hacker, witnessing the
-            journey of early startups or enjoying some free time. You can follow
-            me on{" "}
+          <Typography className="text-justify">
+            When I&apos;m not in full-on developer mode, I spend lots of time
+            with my family and watch football. You can follow me on{" "}
             <Link
               noCustomization
               externalLink
@@ -90,16 +86,14 @@ const AboutMeSection = () => {
           <div className="flex flex-col gap-2 md:flex-row md:gap-6">
             <ul className="flex list-inside list-disc flex-col gap-2">
               <Typography component="li">
-                B.E. in Computer Engineering
+                B.Sc. in Computer Science
               </Typography>
-              <Typography component="li">Full time freelancer</Typography>
             </ul>
             <ul className="flex list-inside list-disc flex-col gap-2">
               <Typography component="li">Avid learner</Typography>
-              <Typography component="li">Aspiring indie hacker</Typography>
             </ul>
           </div>
-          <Typography>
+          <Typography className="text-justify">
             One last thing, I&apos;m available for freelance work, so feel free
             to reach out and say hello! I promise I don&apos;t bite 😉
           </Typography>

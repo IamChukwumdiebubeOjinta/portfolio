@@ -1,8 +1,8 @@
-import { TECHNOLOGIES } from '@/lib/data';
-import Tag from '@/components/data-display/tag';
-import TechDetails from '@/components/data-display/tech-details';
-import Typography from '@/components/general/typography';
-import Container from '@/components/layout/container';
+import { TECHNOLOGIES } from "@/lib/data";
+import Tag from "@/components/data-display/tag";
+import TechDetails from "@/components/data-display/tech-details";
+import Typography from "@/components/general/typography";
+import Container from "@/components/layout/container";
 
 const SkillsSection = () => {
   return (
@@ -16,7 +16,7 @@ const SkillsSection = () => {
         </Typography>
       </div>
 
-      <div className="grid grid-cols-3 gap-y-4 md:grid-cols-6 md:gap-y-8 lg:grid-cols-8 lg:gap-y-12">
+      <div className="grid grid-cols-3 gap-y-4 md:grid-cols-6 md:gap-y-8 lg:grid-cols-6 lg:gap-y-12 items-center justify-center">
         {TECHNOLOGIES.map((technology, index) => (
           <TechDetails {...technology} key={index} />
         ))}

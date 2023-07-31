@@ -20,7 +20,7 @@
   --app-gray-950: 3 7 18;
 
   /* Text */
-  --logo-text: 'Goldman', cursive;
+  --logo-text: "Goldman", cursive;
 }
 
 .dark {
@@ -38,7 +38,14 @@
   --app-gray-950: 255 255 255;
 }
 
-.logo-text{
+body h1,
+body h2,
+body h3,
+body p {
+  cursor: default;
+}
+
+.logo-text {
   font-family: var(--logo-text);
   font-weight: 700;
 }
