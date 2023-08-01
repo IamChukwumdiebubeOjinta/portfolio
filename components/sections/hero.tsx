@@ -28,14 +28,13 @@ const HeroSection = () => {
           <div className="flex flex-col gap-2">
             <Typography variant="h1">
               Hello, I&apos;m <br/> {" "}
-              <span className="inline-block animate-waving-hand font-bold">Chukwumdiebube</span>
+              <span className="inline-block font-bold">Ebube Ojinta</span>
             </Typography>
             <Typography>
-              I&apos;m a full stack developer (React.js & Node.js) with a focus
+              A full stack developer (React.js & Node.js) with a focus
               on creating (and occasionally designing) exceptional digital
               experiences that are accessible, visually appealing, and
-              responsive. Even though I have been creating web applications for
-              over 3 years.
+              responsive.
             </Typography>
           </div>
           <div className="flex flex-col gap-2">

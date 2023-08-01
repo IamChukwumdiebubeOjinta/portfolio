@@ -32,7 +32,7 @@ const AboutMeSection = () => {
         <div className="flex max-w-xl flex-col gap-6">
           <Typography variant="h3">Curiosity piqued?</Typography>
           <Typography className="text-justify">
-            I&apos;m Chukwumdiebube Ojinta, a passionate and design-oriented
+            My name is Chukwumdiebube Uchechukwu Ojinta, a passionate and design-oriented
             frontend developer with 2+ years of experience and a year of work
             experience, currently located in Enugu, Nigeria. My expertise lies
             in full-stack development, focusing on React.js and Node.js. I find
