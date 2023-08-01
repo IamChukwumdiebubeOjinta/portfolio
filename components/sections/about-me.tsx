@@ -66,9 +66,9 @@ const AboutMeSection = () => {
               noCustomization
               externalLink
               withUnderline
-              href={EXTERNAL_LINKS.TWITTER}
+              href={EXTERNAL_LINKS.GITHUB}
             >
-              Twitter
+              Github
             </Link>{" "}
             where I share tech-related bites and build in public, or you can
             follow me on{" "}
@@ -76,9 +76,9 @@ const AboutMeSection = () => {
               noCustomization
               externalLink
               withUnderline
-              href={EXTERNAL_LINKS.GITHUB}
+              href={EXTERNAL_LINKS.LINKEDIN}
             >
-              GitHub
+              LinkedIn
             </Link>
             .
           </Typography>
@@ -95,7 +95,7 @@ const AboutMeSection = () => {
           </div>
           <Typography className="text-justify">
             One last thing, I&apos;m available for freelance work, so feel free
-            to reach out and say hello! I promise I don&apos;t bite 😉
+            to reach out and say hello!
           </Typography>
         </div>
       </div>

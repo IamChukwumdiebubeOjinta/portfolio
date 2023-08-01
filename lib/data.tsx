@@ -14,11 +14,9 @@ import LogoTailwindcss from "/public/images/logos/icon-tailwindcss.svg";
 import LogoFigma from "/public/images/logos/icon-figma.svg";
 import LogoGit from "/public/images/logos/icon-git.svg";
 
-import LogoUpwork from "/public/images/logos/logo-upwork.svg";
-import LogoGreenApex from "/public/images/logos/logo-greenapex.svg";
-import LogoGreenApexLight from "/public/images/logos/logo-greenapex-light.svg";
-import LogoDotnpixel from "/public/images/logos/logo-dotnpixel.svg";
-import LogoDotnpixelLight from "/public/images/logos/logo-dotnpixel-light.svg";
+import LogoAfricaPlan from "@/public/images/africa-plan.jpeg";
+import LogoChiefSoft from "@/public/images/chiefsoft-lg.png";
+import LogoGenesys from "@/public/images/genesys.jpg";
 
 import ProjectFiskil from "/public/images/project-fiskil.png";
 import ProjectWingie from "/public/images/project-wingie.png";
@@ -42,6 +40,7 @@ export const EXTERNAL_LINKS = {
   FIGMA: "https://www.figma.com/@I_amEbube",
   FIGMA_FILE:
     "https://www.figma.com/community/file/1262992249991763120/Personal-Portfolio-Website-Template-%7C-Mobile-%26-Desktop",
+  LINKEDIN: "https://www.linkedin.com/in/chukwumdiebube-ojinta-3142b1228/",
 };
 
 export const NAV_LINKS = [
@@ -65,16 +64,12 @@ export const NAV_LINKS = [
 
 export const SOCIAL_LINKS = [
   {
-    icon: Mail,
+    icon: Github,
     url: "https://github.com/IamChukwumdiebubeOjinta",
   },
   {
     icon: Linkedin,
-    url: "https://github.com/IamChukwumdiebubeOjinta",
-  },
-  {
-    icon: Github,
-    url: "https://github.com/IamChukwumdiebubeOjinta",
+    url: "https://www.linkedin.com/in/chukwumdiebube-ojinta-3142b1228/",
   },
   {
     icon: Twitter,
@@ -148,39 +143,43 @@ export const TECHNOLOGIES: TechDetails[] = [
 
 export const EXPERIENCES: ExperienceDetails[] = [
   {
-    logo: LogoUpwork,
-    logoAlt: "Upwork logo",
-    position: "Independent Freelancer",
-    startDate: new Date(2021, 10),
+    logo: LogoChiefSoft,
+    logoAlt: "ChiefSoft logo",
+    position: "Front-End Developer",
+    startDate: new Date(2022, 10),
     currentlyWorkHere: true,
     summary: [
-      "Worked for various clients like Fiskil, Shosho, Crowe MacKay LLP.",
-      "Worked with a variety of technologies, including React, Next.js, Typescript, Express.js, PostgreSQL, Tailwindcss, Mui, Firebase, Storybook, Cypress, and others.",
+      "I am actively involved in various project development",
+      "I am applying logic to code and optimizing web applications for better performance.",
+      "I honed my docker skills with Dockerized apps.",
+      "Worked with a variety of technologies, including React, Next.js, Typescript, TailwindCss, Docker and others.",
     ],
   },
   {
-    logo: LogoGreenApex,
-    darkModeLogo: LogoGreenApexLight,
-    logoAlt: "Greenapex logo",
-    position: "Team Lead",
-    startDate: new Date(2017, 6),
-    endDate: new Date(2021, 9),
+    logo: LogoAfricaPlan,
+    logoAlt: "Africa-Plan logo",
+    position: "Full-Stack Developer Intern",
+    startDate: new Date(2022, 7),
+    endDate: new Date(2022, 11),
     summary: [
+      "Worked as a full stack developer (React / Node & Express).",
+      "I improved my soft skills for effective teamwork and collaboration.",
       "Acted as team lead in different projects.",
       "Brainstormed new ideas & gathered requirements for internal projects.",
       "Designed architecture of different projects (frontend + backend).",
-      "Worked on enterprise-level projects for a variety of clients.",
       "Handled sprint planning & task distribution.",
     ],
   },
   {
-    logo: LogoDotnpixel,
-    darkModeLogo: LogoDotnpixelLight,
-    logoAlt: "Dotnpixel logo",
-    position: "Full Stack Developer",
-    startDate: new Date(2015, 11),
-    endDate: new Date(2017, 4),
-    summary: ["Worked as a full stack developer (React / Laravel)."],
+    logo: LogoGenesys,
+    logoAlt: "Genesys logo",
+    position: "Front-End Developer",
+    startDate: new Date(2022, 4),
+    endDate: new Date(2022, 6),
+    summary: [
+      "I honed my soft skills for effective teamwork and collaboration.",
+      "I was actively involved in project development, allowing me to gain practical experience and further refine my skills.",
+    ],
   },
 ];
 
@@ -194,10 +193,8 @@ export const PROJECTS: ProjectDetails[] = [
     technologies: [
       "React",
       "Typescript",
-      "React Bootstrap",
-      "Firebase",
-      "Express.js",
-      "PostgreSQL",
+      "Tailwind Css",
+      "PHP",
       "Styled Components",
       "Redux",
     ],
