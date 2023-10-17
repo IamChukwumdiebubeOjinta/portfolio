@@ -18,9 +18,9 @@ import LogoAfricaPlan from "@/public/images/africa-plan.jpeg";
 import LogoChiefSoft from "@/public/images/chiefsoft-lg.png";
 import LogoGenesys from "@/public/images/genesys.jpg";
 
-import ProjectFiskil from "/public/images/project-fiskil.png";
-import ProjectWingie from "/public/images/project-wingie.png";
-import ProjectPepehousing from "/public/images/project-pepehousing.png";
+import MyFit from "/public/images/myfit.png";
+import WrenchBoard from "/public/images/wrenchboard.png";
+import MetaSite from "/public/images/metasite.png";
 
 import AvatarKrisztian from "/public/images/avatar-krisztian.png";
 import AvatarEugen from "/public/images/avatar-eugen.png";
@@ -185,56 +185,45 @@ export const EXPERIENCES: ExperienceDetails[] = [
 
 export const PROJECTS: ProjectDetails[] = [
   {
-    name: "Wingie",
+    name: "Wrenchboard",
     description:
-      "A platform for comparing and finding affordable flights, as well as booking and purchasing tickets safely and easily in a few simple clicks.",
-    url: "https://www.wingie.com",
-    previewImage: ProjectWingie,
+      "This is a platform for setting and tracking family goals and rewarding achievements. Users can discover tasks to complete and earn rewards or create a portfolio of tasks for others to fulfill.",
+    url: "https://www.wrenchboard.com",
+    previewImage: WrenchBoard,
     technologies: [
       "React",
-      "Typescript",
+      "Docker",
       "Tailwind Css",
-      "PHP",
-      "Styled Components",
-      "Redux",
+      "Redux Toolkit",
     ],
   },
   {
-    name: "Fiskil",
+    name: "MYFIT",
     description:
-      "A platform for accessing real-time open banking and energy data to help you grow your business, backed with scalable back-end infrastructure.",
-    url: "https://fiskil.com.au",
-    previewImage: ProjectFiskil,
+      "It serves as a personal healthcare concierge, designed to facilitate the management of daily and long-term health activities. With this application, users maintain complete ownership of their health records, granting them the flexibility to control provider access as needed.",
+    url: "https://www.myfit.ai",
+    previewImage: MyFit,
     technologies: [
       "React",
-      "Next.js",
-      "Typescript",
+      "Styled Components",
       "Tailwindcss",
-      "Material UI",
       "Redux Toolkit",
-      "React Query",
-      "Express.js",
-      "PostgreSQL",
-      "Firebase",
-      "AWS Amplify",
-      "Cypress",
-      "Storybook",
+      "Auth.Js",
     ],
   },
   {
     name: "Pepehousing",
     description:
-      "A platform for renting a flat or room in Poland. You may browse hundreds of verified deals, contact the vendor, and pay online in a simple and secure manner.",
-    url: "https://pepehousing.com",
-    previewImage: ProjectPepehousing,
+      "",
+    url: "https://metasite-clone.netlify.app",
+    previewImage: MetaSite,
     technologies: [
       "React",
       "Next.js",
       "Typescript",
       "Tailwindcss",
       "Redux Toolkit",
-      "React Query",
-      "Storybook",
+      "Framer Motion",
     ],
   },
 ];
