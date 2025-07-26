@@ -1,7 +1,9 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
+import { useState } from 'react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 const technologies = [
   {
@@ -112,9 +114,62 @@ const technologies = [
     category: 'Real-time',
     hasIcon: true,
   },
+  // Additional technologies for the expanded view
+  {
+    name: 'Cypress',
+    icon: '/images/logos/icon-cypress.svg',
+    category: 'Testing',
+    hasIcon: true,
+  },
+  {
+    name: 'Storybook',
+    icon: '/images/logos/icon-storybook.svg',
+    category: 'Development',
+    hasIcon: true,
+  },
+  {
+    name: 'Sass',
+    icon: '/images/logos/icon-sass.svg',
+    category: 'Styling',
+    hasIcon: true,
+  },
+  {
+    name: 'Upwork',
+    icon: '/images/logos/logo-upwork.svg',
+    category: 'Platform',
+    hasIcon: true,
+  },
+  {
+    name: 'Cypress',
+    icon: '/images/logos/icon-cypress-light.svg',
+    category: 'Testing',
+    hasIcon: true,
+  },
+  {
+    name: 'Express',
+    icon: '/images/logos/icon-express-light.svg',
+    category: 'Backend',
+    hasIcon: true,
+  },
+  {
+    name: 'Socket.io',
+    icon: '/images/logos/icon-socket-light.svg',
+    category: 'Real-time',
+    hasIcon: true,
+  },
 ];
 
+const INITIAL_ITEMS_COUNT = 12;
+
 export function TechStack() {
+  const [showAll, setShowAll] = useState(false);
+
+  const visibleTechnologies = showAll 
+    ? technologies 
+    : technologies.slice(0, INITIAL_ITEMS_COUNT);
+
+  const hasMoreItems = technologies.length > INITIAL_ITEMS_COUNT;
+
   return (
     <section id='tech-stack' className='py-20 px-4 bg-muted/30'>
       <div className='max-w-6xl mx-auto'>
@@ -134,35 +189,64 @@ export function TechStack() {
         </motion.div>
 
         <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6'>
-          {technologies.map((tech, index) => (
-            <motion.div
-              key={tech.name}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3, delay: index * 0.05 }}
-              viewport={{ once: true }}
-              className='group'
-            >
-              <div className='bg-card border border-border rounded-xl p-6 text-center hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10'>
-                <div className='text-4xl mb-3 group-hover:scale-110 transition-transform duration-300 flex items-center justify-center'>
-                  {tech.hasIcon ? (
-                    <Image
-                      src={tech.icon}
-                      alt={tech.name}
-                      width={48}
-                      height={48}
-                      className='w-12 h-12'
-                    />
-                  ) : (
-                    <span>{tech.icon}</span>
-                  )}
+          <AnimatePresence>
+            {visibleTechnologies.map((tech, index) => (
+              <motion.div
+                key={tech.name}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                className='group'
+              >
+                <div className='bg-card border border-border rounded-xl p-6 text-center hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10'>
+                  <div className='text-4xl mb-3 group-hover:scale-110 transition-transform duration-300 flex items-center justify-center'>
+                    {tech.hasIcon ? (
+                      <Image
+                        src={tech.icon}
+                        alt={tech.name}
+                        width={48}
+                        height={48}
+                        className='w-12 h-12'
+                      />
+                    ) : (
+                      <span>{tech.icon}</span>
+                    )}
+                  </div>
+                  <h3 className='font-semibold text-sm mb-1'>{tech.name}</h3>
+                  <p className='text-xs text-muted-foreground'>{tech.category}</p>
                 </div>
-                <h3 className='font-semibold text-sm mb-1'>{tech.name}</h3>
-                <p className='text-xs text-muted-foreground'>{tech.category}</p>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
+
+        {hasMoreItems && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className='text-center mt-12'
+          >
+            <button
+              onClick={() => setShowAll(!showAll)}
+              className='inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors duration-200 font-medium'
+            >
+              {showAll ? (
+                <>
+                  <ChevronUp className='w-4 h-4' />
+                  Show Less
+                </>
+              ) : (
+                <>
+                  <ChevronDown className='w-4 h-4' />
+                  See More
+                </>
+              )}
+            </button>
+          </motion.div>
+        )}
       </div>
     </section>
   );

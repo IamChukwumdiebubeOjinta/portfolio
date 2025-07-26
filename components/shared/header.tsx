@@ -139,7 +139,7 @@ const DownloadCV = () => {
   return (
     <Button
       variant='outline'
-      className='hover:bg-primary/10 hover:text-primary transition-chelsea'
+      className='hover:bg-primary/10 hover:text-primary hover:border-primary bg-gradient-to-r from-primary via-primary to-secondary bg-clip-text transition-chelsea'
       size='icon'
       onClick={() =>
         window?.open('/files/ChukwumdiebubeOjinta.pdf', '_blank')

@@ -8,7 +8,7 @@ export function Hero() {
   return (
     <section
       id='home'
-      className='relative min-h-screen flex items-center justify-center px-4 overflow-hidden'
+      className='relative min-h-screen flex items-center justify-center px-4 overflow-hidden pt-2 md:pt-0'
     >
       {/* Animated background grid */}
       <div className='absolute inset-0 bg-grid-white/[0.02] bg-grid-16' />
