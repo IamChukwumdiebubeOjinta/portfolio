@@ -5,7 +5,8 @@ import { createSession } from '@/lib/session';
 
 export async function POST(request: NextRequest) {
   try {
-    const { username, password } = await request.json();
+    const { username, password }: { username: string; password: string } =
+      await request.json();
 
     // Validate input
     if (!username || !password) {
@@ -34,9 +35,9 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       );
     }
-
     // Verify password
     const isPasswordValid = await compare(password, user.password);
+    console.log('isPasswordValid', isPasswordValid);
 
     if (!isPasswordValid) {
       return NextResponse.json(
@@ -74,7 +75,6 @@ export async function POST(request: NextRequest) {
     });
 
     return response;
-
   } catch (error) {
     console.error('Login error:', error);
     return NextResponse.json(
@@ -82,4 +82,4 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
-} 
+}
