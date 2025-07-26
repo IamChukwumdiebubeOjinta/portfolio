@@ -1,51 +1,73 @@
-@import url("https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Ref :: https://twitter.com/steventey/status/1677339375645126659 */
-:root {
-  --app-gray-default: 255 255 255;
-  --app-gray-50: 249 250 251;
-  --app-gray-100: 243 244 246;
-  --app-gray-200: 229 231 235;
-  --app-gray-300: 209 213 219;
-  --app-gray-400: 156 163 175;
-  --app-gray-500: 107 114 128;
-  --app-gray-600: 75 85 99;
-  --app-gray-700: 55 65 81;
-  --app-gray-800: 31 41 55;
-  --app-gray-900: 17 24 39;
-  --app-gray-950: 3 7 18;
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 239 84% 67%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 239 84% 67%;
+    --radius: 0.5rem;
+  }
 
-  /* Text */
-  --logo-text: "Goldman", cursive;
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 239 84% 67%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 239 84% 67%;
+  }
 }
 
-.dark {
-  --app-gray-default: 3 7 18;
-  --app-gray-50: 17 24 39;
-  --app-gray-100: 31 41 55;
-  --app-gray-200: 55 65 81;
-  --app-gray-300: 75 85 99;
-  --app-gray-400: 107 114 128;
-  --app-gray-500: 156 163 175;
-  --app-gray-600: 209 213 219;
-  --app-gray-700: 229 231 235;
-  --app-gray-800: 243 244 246;
-  --app-gray-900: 249 250 251;
-  --app-gray-950: 255 255 255;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
-body h1,
-body h2,
-body h3,
-body p {
-  cursor: default;
-}
+@layer utilities {
+  .bg-grid-white\/\[0\.02\] {
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  }
 
-.logo-text {
-  font-family: var(--logo-text);
-  font-weight: 700;
+  .bg-grid-16 {
+    background-size: 16px 16px;
+  }
 }
