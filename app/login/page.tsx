@@ -34,7 +34,7 @@ export default function AdminLogin() {
     setTimeout(() => {
       if (
         credentials.username === 'admin' &&
-        credentials.password === 'supersecurepass'
+        credentials.password === 'LocoM0tive$$'
       ) {
         // Redirect to dashboard
         window.location.href = '/admin/dashboard';

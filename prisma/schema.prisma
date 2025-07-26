@@ -13,3 +13,297 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+enum UserRole {
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+enum ProjectStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum BlogStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum ActivityType {
+  PROJECT_CREATED
+  PROJECT_UPDATED
+  PROJECT_DELETED
+  BLOG_CREATED
+  BLOG_PUBLISHED
+  BLOG_UPDATED
+  BLOG_DELETED
+  SETTING_CHANGED
+  FEATURE_TOGGLED
+}
+
+enum SettingType {
+  STRING
+  NUMBER
+  BOOLEAN
+  JSON
+}
+
+// ============================================================================
+// USER MANAGEMENT
+// ============================================================================
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  role      UserRole @default(ADMIN)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  projects  Project[]
+  blogs     Blog[]
+  activities Activity[]
+
+  @@map("users")
+  @@index([username])
+  @@index([email])
+  @@index([role])
+  @@index([isActive])
+  @@index([createdAt])
+}
+
+// ============================================================================
+// PROJECT MANAGEMENT
+// ============================================================================
+
+model Project {
+  id          String        @id @default(cuid())
+  title       String
+  description String
+  slug        String        @unique
+  excerpt     String?
+  
+  // Tech stack and features
+  techStack   String[]      // Array of technology names
+  features    String[]      // Array of feature descriptions
+  
+  // URLs
+  githubUrl   String?
+  demoUrl     String?
+  imageUrl    String?
+  
+  // Status and visibility
+  isVisible   Boolean       @default(true)
+  isFeatured  Boolean       @default(false)
+  status      ProjectStatus @default(DRAFT)
+  
+  // Metadata
+  order       Int           @default(0)
+  views       Int           @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  
+  // Relations
+  authorId    String
+  author      User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  images      ProjectImage[]
+  tags        ProjectTag[]
+  
+  @@map("projects")
+  @@index([slug])
+  @@index([isVisible])
+  @@index([isFeatured])
+  @@index([status])
+  @@index([order])
+  @@index([authorId])
+  @@index([createdAt])
+  @@index([updatedAt])
+  @@index([isVisible, isFeatured])
+  @@index([status, isVisible])
+}
+
+model ProjectImage {
+  id        String   @id @default(cuid())
+  url       String
+  alt       String?
+  caption   String?
+  order     Int      @default(0)
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  // Relations
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  @@map("project_images")
+  @@index([projectId])
+  @@index([isPrimary])
+  @@index([order])
+  @@index([createdAt])
+}
+
+model ProjectTag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  color     String?  // Hex color code
+  createdAt DateTime @default(now())
+  
+  // Relations
+  projects  Project[]
+  
+  @@map("project_tags")
+  @@index([name])
+  @@index([createdAt])
+}
+
+// ============================================================================
+// BLOG MANAGEMENT
+// ============================================================================
+
+model Blog {
+  id          String     @id @default(cuid())
+  title       String
+  slug        String     @unique
+  excerpt     String
+  content     String     @db.Text
+  
+  // Status and visibility
+  isPublished Boolean    @default(false)
+  isFeatured  Boolean    @default(false)
+  status      BlogStatus @default(DRAFT)
+  
+  // SEO and metadata
+  metaTitle       String?
+  metaDescription String?
+  featuredImage   String?
+  
+  // Analytics
+  views       Int      @default(0)
+  readTime    Int?     // Estimated reading time in minutes
+  
+  // Timestamps
+  publishedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  tags        BlogTag[]
+  
+  @@map("blogs")
+  @@index([slug])
+  @@index([isPublished])
+  @@index([isFeatured])
+  @@index([status])
+  @@index([authorId])
+  @@index([publishedAt])
+  @@index([createdAt])
+  @@index([updatedAt])
+  @@index([isPublished, isFeatured])
+  @@index([status, isPublished])
+}
+
+model BlogTag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  color     String?  // Hex color code
+  createdAt DateTime @default(now())
+  
+  // Relations
+  blogs     Blog[]
+  
+  @@map("blog_tags")
+  @@index([name])
+  @@index([createdAt])
+}
+
+// ============================================================================
+// ACTIVITY TRACKING
+// ============================================================================
+
+model Activity {
+  id        String        @id @default(cuid())
+  action    String        // e.g., "Updated project", "Published blog"
+  item      String        // e.g., "Uloma AI Assistant", "Building AI Applications"
+  details   String?       // Additional details
+  type      ActivityType
+  createdAt DateTime      @default(now())
+  
+  // Relations
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("activities")
+  @@index([userId])
+  @@index([type])
+  @@index([createdAt])
+  @@index([userId, createdAt])
+  @@index([type, createdAt])
+}
+
+// ============================================================================
+// SITE CONFIGURATION
+// ============================================================================
+
+model Setting {
+  id          String      @id @default(cuid())
+  key         String      @unique
+  value       String
+  type        SettingType
+  description String?
+  isPublic    Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  
+  @@map("settings")
+  @@index([key])
+  @@index([isPublic])
+  @@index([type])
+  @@index([createdAt])
+}
+
+// ============================================================================
+// CONTACT & ANALYTICS
+// ============================================================================
+
+model Contact {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String   @db.Text
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  @@map("contacts")
+  @@index([email])
+  @@index([isRead])
+  @@index([createdAt])
+  @@index([isRead, createdAt])
+}
+
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  referrer  String?
+  userAgent String?
+  ipAddress String?
+  createdAt DateTime @default(now())
+  
+  @@map("page_views")
+  @@index([path])
+  @@index([createdAt])
+  @@index([path, createdAt])
+  @@index([ipAddress])
+}
