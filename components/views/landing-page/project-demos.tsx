@@ -2,16 +2,9 @@
 
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { ExternalLink, Play, Github } from 'lucide-react';
+import { Github } from 'lucide-react';
+import { ProjectCard } from '@/components/shared/project-card';
 
 const demos = [
   {
@@ -53,7 +46,7 @@ export function ProjectDemos() {
     <section id='demos' className='py-20 px-4 relative overflow-hidden'>
       {/* Gradient Background */}
       <div className='absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none' />
-      
+
       {/* Animated gradient orbs */}
       <div className='absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse' />
       <div className='absolute bottom-1/4 right-1/4 w-80 h-80 bg-secondary/10 rounded-full blur-3xl animate-pulse delay-1000' />
@@ -76,72 +69,7 @@ export function ProjectDemos() {
 
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
           {demos.map((demo, index) => (
-            <motion.div
-              key={demo.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-            >
-              <Card className='overflow-hidden hover:shadow-xl transition-all duration-300 group h-full'>
-                <div className='relative overflow-hidden'>
-                  <img
-                    src={demo.image || '/placeholder.svg'}
-                    alt={demo.title}
-                    className='w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300'
-                  />
-                  <div className='absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center'>
-                    <Button size='sm' className='gap-2'>
-                      <Play className='h-4 w-4' />
-                      View Demo
-                    </Button>
-                  </div>
-                  <Badge
-                    className='absolute top-3 right-3'
-                    variant={
-                      demo.status === 'Live'
-                        ? 'default'
-                        : demo.status === 'Beta'
-                          ? 'secondary'
-                          : 'outline'
-                    }
-                  >
-                    {demo.status}
-                  </Badge>
-                </div>
-
-                <CardHeader>
-                  <div className='flex items-start justify-between'>
-                    <div>
-                      <CardTitle className='text-xl mb-2'>
-                        {demo.title}
-                      </CardTitle>
-                      <CardDescription className='text-base'>
-                        {demo.description}
-                      </CardDescription>
-                    </div>
-                    <div className='flex gap-2 ml-4'>
-                      <Button variant='ghost' size='icon' className='h-8 w-8'>
-                        <ExternalLink className='h-4 w-4' />
-                      </Button>
-                      <Button variant='ghost' size='icon' className='h-8 w-8'>
-                        <Github className='h-4 w-4' />
-                      </Button>
-                    </div>
-                  </div>
-                </CardHeader>
-
-                <CardContent>
-                  <div className='flex flex-wrap gap-2'>
-                    {demo.tech.map(tech => (
-                      <Badge key={tech} variant='outline' className='text-xs'>
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
+            <ProjectCard key={index} {...demo} />
           ))}
         </div>
 

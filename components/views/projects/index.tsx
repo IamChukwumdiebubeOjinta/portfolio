@@ -2,16 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { ExternalLink, Github } from 'lucide-react';
+import { ProjectCard } from '@/components/shared/project-card';
 
 const allProjectsData = [
   {
@@ -20,6 +11,8 @@ const allProjectsData = [
     tech: ['React', 'Node.js'],
     githubUrl: '#',
     demoUrl: '#',
+    image: '/placeholder.svg?height=300&width=500',
+    status: 'Live',
   },
   {
     title: 'Project 2',
@@ -27,6 +20,8 @@ const allProjectsData = [
     tech: ['Next.js', 'Tailwind CSS'],
     githubUrl: '#',
     demoUrl: '#',
+    image: '/placeholder.svg?height=300&width=500',
+    status: 'Beta',
   },
   {
     title: 'Project 3',
@@ -34,6 +29,8 @@ const allProjectsData = [
     tech: ['Vue.js', 'Express'],
     githubUrl: '#',
     demoUrl: '#',
+    image: '/placeholder.svg?height=300&width=500',
+    status: 'Development',
   },
 ];
 
@@ -66,49 +63,7 @@ export function Projects() {
 
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
           {allProjectsData.map((project, index) => (
-            <motion.div
-              key={project.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-            >
-              <Card className='h-full hover:shadow-lg transition-shadow'>
-                <CardHeader>
-                  <CardTitle>{project.title}</CardTitle>
-                  <CardDescription>{project.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className='flex flex-wrap gap-2'>
-                    {project.tech.map(tech => (
-                      <Badge key={tech} variant='outline' className='text-xs'>
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
-                  <div className='flex justify-end mt-4'>
-                    <Button variant='ghost' size='icon' asChild>
-                      <a
-                        href={project.githubUrl}
-                        target='_blank'
-                        rel='noopener noreferrer'
-                      >
-                        <Github className='h-4 w-4' />
-                      </a>
-                    </Button>
-                    <Button variant='ghost' size='icon' asChild>
-                      <a
-                        href={project.demoUrl}
-                        target='_blank'
-                        rel='noopener noreferrer'
-                      >
-                        <ExternalLink className='h-4 w-4' />
-                      </a>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
+            <ProjectCard key={index} {...project} />
           ))}
         </div>
       </div>
