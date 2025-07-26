@@ -52,68 +52,66 @@ export default function AdminLogin() {
       transition={{ duration: 0.5 }}
     >
       <Card className='w-full'>
-          <CardHeader className='text-center'>
-            <div className='mx-auto w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4'>
-              <Lock className='h-6 w-6 text-primary' />
+        <CardHeader className='text-center'>
+          <div className='mx-auto w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4'>
+            <Lock className='h-6 w-6 text-primary' />
+          </div>
+          <CardTitle className='text-2xl'>3bube</CardTitle>
+          <CardDescription>Portfolio management dashboard</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleLogin} className='space-y-4'>
+            <div className='space-y-2'>
+              <Label htmlFor='username'>Username</Label>
+              <div className='relative'>
+                <User className='absolute left-3 top-3 h-4 w-4 text-muted-foreground' />
+                <Input
+                  id='username'
+                  type='text'
+                  placeholder='admin'
+                  className='pl-10'
+                  value={credentials.username}
+                  onChange={e =>
+                    setCredentials({
+                      ...credentials,
+                      username: e.target.value,
+                    })
+                  }
+                  required
+                />
+              </div>
             </div>
-            <CardTitle className='text-2xl'>3bube</CardTitle>
-            <CardDescription>
-              Portfolio management dashboard
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleLogin} className='space-y-4'>
-              <div className='space-y-2'>
-                <Label htmlFor='username'>Username</Label>
-                <div className='relative'>
-                  <User className='absolute left-3 top-3 h-4 w-4 text-muted-foreground' />
-                  <Input
-                    id='username'
-                    type='text'
-                    placeholder='admin'
-                    className='pl-10'
-                    value={credentials.username}
-                    onChange={e =>
-                      setCredentials({
-                        ...credentials,
-                        username: e.target.value,
-                      })
-                    }
-                    required
-                  />
-                </div>
+            <div className='space-y-2'>
+              <Label htmlFor='password'>Password</Label>
+              <div className='relative'>
+                <Lock className='absolute left-3 top-3 h-4 w-4 text-muted-foreground' />
+                <Input
+                  id='password'
+                  type='password'
+                  placeholder='••••••••'
+                  className='pl-10'
+                  value={credentials.password}
+                  onChange={e =>
+                    setCredentials({
+                      ...credentials,
+                      password: e.target.value,
+                    })
+                  }
+                  required
+                />
               </div>
-              <div className='space-y-2'>
-                <Label htmlFor='password'>Password</Label>
-                <div className='relative'>
-                  <Lock className='absolute left-3 top-3 h-4 w-4 text-muted-foreground' />
-                  <Input
-                    id='password'
-                    type='password'
-                    placeholder='••••••••'
-                    className='pl-10'
-                    value={credentials.password}
-                    onChange={e =>
-                      setCredentials({
-                        ...credentials,
-                        password: e.target.value,
-                      })
-                    }
-                    required
-                  />
-                </div>
-              </div>
-              {error && (
-                <Alert variant='destructive'>
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
-              <Button type='submit' className='w-full' disabled={isLoading}>
-                {isLoading ? 'Signing in...' : 'Sign In'}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-      </motion.div>
+            </div>
+            {error && (
+              <Alert variant='destructive'>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+            <Button type='submit' className='w-full' disabled={isLoading}>
+              {isLoading ? 'Signing in...' : 'Sign In'}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 }

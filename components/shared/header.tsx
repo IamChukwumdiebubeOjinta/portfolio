@@ -141,9 +141,7 @@ const DownloadCV = () => {
       variant='outline'
       className='hover:bg-primary/10 hover:text-primary hover:border-primary bg-gradient-to-r from-primary via-primary to-secondary bg-clip-text transition-chelsea'
       size='icon'
-      onClick={() =>
-        window?.open('/files/ChukwumdiebubeOjinta.pdf', '_blank')
-      }
+      onClick={() => window?.open('/files/ChukwumdiebubeOjinta.pdf', '_blank')}
     >
       <FileDown className='h-4 w-4' />
     </Button>

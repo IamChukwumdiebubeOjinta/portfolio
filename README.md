@@ -14,6 +14,7 @@ A modern, responsive portfolio website built by Chukwumdiebube Ojinta, showcasin
 ## 🎨 Design System
 
 The portfolio uses a custom Chelsea Tech design system featuring:
+
 - **Primary Color**: Deep Blue (#0346a5)
 - **Secondary Color**: Vibrant Yellow (#ffd100)
 - **Typography**: Space Grotesk for headings, Inter for body text
@@ -49,17 +50,20 @@ portfolio/
 ## 🚀 Getting Started
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd portfolio
    ```
 
 2. **Install dependencies**
+
    ```bash
    pnpm install
    ```
 
 3. **Run the development server**
+
    ```bash
    pnpm dev
    ```
@@ -70,12 +74,14 @@ portfolio/
 ## 🎯 Recent Updates
 
 ### Hero Section Improvements
+
 - **Enhanced Profile Image**: Removed "pasted" appearance with integrated design
 - **Gradient Overlays**: Added subtle gradient effects for better visual integration
 - **Animated Elements**: Floating accent elements with smooth animations
 - **Better Depth**: Multiple shadow layers for improved visual hierarchy
 
 ### Design System Enhancements
+
 - **Custom CSS Utilities**: Chelsea Tech specific gradients and shadows
 - **Typography System**: Optimized font pairing and weights
 - **Color Palette**: Consistent color tokens throughout the application
@@ -83,18 +89,22 @@ portfolio/
 ## 📝 Customization
 
 ### Colors
+
 Update the color scheme in `app/globals.css`:
+
 ```css
 :root {
-  --primary: 214 96% 33%;    /* Chelsea Blue */
-  --secondary: 48 100% 50%;  /* Chelsea Yellow */
+  --primary: 214 96% 33%; /* Chelsea Blue */
+  --secondary: 48 100% 50%; /* Chelsea Yellow */
 }
 ```
 
 ### Profile Image
+
 Replace the profile image at `public/images/profile/ebube-headshot.jpg` with your own photo.
 
 ### Content
+
 Update project information, skills, and personal details in the respective component files.
 
 ## 🚀 Deployment
@@ -116,7 +126,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## 👨‍💻 Credits
 
 **Design & Development**: [Ojinta Chukwumdiebube](https://github.com/IamChukwumdiebubeOjinta)  
-*From initial design concepts to full-stack development, this portfolio represents a complete end-to-end project showcasing modern web development practices and custom design systems.*
+_From initial design concepts to full-stack development, this portfolio represents a complete end-to-end project showcasing modern web development practices and custom design systems._
 
 ---
 

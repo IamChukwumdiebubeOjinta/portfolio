@@ -5,7 +5,6 @@ import { ArrowRight, Github, Linkedin, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
-
 const profilePicture = '/images/profile/ebube-headshot.jpg';
 
 export function Hero() {
@@ -64,7 +63,7 @@ export function Hero() {
               I build modern, intelligent, user-first digital experiences using{' '}
               <span className='text-primary font-medium'>Next.js</span>,{' '}
               <span className='text-primary font-medium'>Remix</span>,{' '}
-              <span className='text-primary font-medium'>React</span>,{' '} 
+              <span className='text-primary font-medium'>React</span>,{' '}
               <span className='text-secondary font-medium'>
                 and other web technologies.
               </span>

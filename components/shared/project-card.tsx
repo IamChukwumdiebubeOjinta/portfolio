@@ -1,4 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ExternalLink, Play, Github } from 'lucide-react';
@@ -39,11 +45,7 @@ export function ProjectCard({
           />
           <div className='absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center'>
             {demoUrl ? (
-              <Button
-                size='sm'
-                className='gap-2'
-                asChild
-              >
+              <Button size='sm' className='gap-2' asChild>
                 <a href={demoUrl} target='_blank' rel='noopener noreferrer'>
                   <Play className='h-4 w-4' />
                   View Demo
@@ -73,33 +75,21 @@ export function ProjectCard({
         <CardHeader>
           <div className='flex items-start justify-between'>
             <div>
-              <CardTitle className='text-xl mb-2'>
-                {title}
-              </CardTitle>
+              <CardTitle className='text-xl mb-2'>{title}</CardTitle>
               <CardDescription className='text-base'>
                 {description}
               </CardDescription>
             </div>
             <div className='flex gap-2 ml-4'>
               {demoUrl && (
-                <Button
-                  variant='ghost'
-                  size='icon'
-                  className='h-8 w-8'
-                  asChild
-                >
+                <Button variant='ghost' size='icon' className='h-8 w-8' asChild>
                   <a href={demoUrl} target='_blank' rel='noopener noreferrer'>
                     <ExternalLink className='h-4 w-4' />
                   </a>
                 </Button>
               )}
               {githubUrl && (
-                <Button
-                  variant='ghost'
-                  size='icon'
-                  className='h-8 w-8'
-                  asChild
-                >
+                <Button variant='ghost' size='icon' className='h-8 w-8' asChild>
                   <a href={githubUrl} target='_blank' rel='noopener noreferrer'>
                     <Github className='h-4 w-4' />
                   </a>

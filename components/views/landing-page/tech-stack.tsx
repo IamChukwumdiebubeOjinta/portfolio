@@ -121,8 +121,8 @@ const INITIAL_ITEMS_COUNT = 12;
 export function TechStack() {
   const [showAll, setShowAll] = useState(false);
 
-  const visibleTechnologies = showAll 
-    ? technologies 
+  const visibleTechnologies = showAll
+    ? technologies
     : technologies.slice(0, INITIAL_ITEMS_COUNT);
 
   const hasMoreItems = technologies.length > INITIAL_ITEMS_COUNT;
@@ -171,7 +171,9 @@ export function TechStack() {
                     )}
                   </div>
                   <h3 className='font-semibold text-sm mb-1'>{tech.name}</h3>
-                  <p className='text-xs text-muted-foreground'>{tech.category}</p>
+                  <p className='text-xs text-muted-foreground'>
+                    {tech.category}
+                  </p>
                 </div>
               </motion.div>
             ))}
