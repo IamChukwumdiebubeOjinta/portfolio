@@ -301,6 +301,9 @@ export default function CreateBlog() {
                   value={formData.featuredImage}
                   onChange={(url) => setFormData(prev => ({ ...prev, featuredImage: url }))}
                   placeholder='Upload featured image'
+                  type="blog"
+                  imageType="featured"
+                  slug={formData.slug}
                 />
               </CardContent>
             </Card>

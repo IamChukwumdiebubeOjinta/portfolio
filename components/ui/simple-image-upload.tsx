@@ -13,6 +13,9 @@ interface ImageUploadProps {
   onChange: (url: string) => void;
   placeholder?: string;
   className?: string;
+  type: 'project' | 'blog';
+  imageType: string;
+  slug: string;
 }
 
 interface UploadingFile {
@@ -27,6 +30,9 @@ export function ImageUpload({
   onChange,
   placeholder = 'Upload image',
   className = '',
+  type,
+  imageType,
+  slug,
 }: ImageUploadProps) {
   const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([]);
   const [dragActive, setDragActive] = useState(false);
@@ -55,6 +61,9 @@ export function ImageUpload({
       try {
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('type', type);
+        formData.append('imageType', imageType);
+        formData.append('slug', slug);
 
         // Simulate progress
         const progressInterval = setInterval(() => {
@@ -112,7 +121,7 @@ export function ImageUpload({
         console.error('Upload failed:', error);
       }
     },
-    [onChange]
+    [onChange, type, imageType, slug]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

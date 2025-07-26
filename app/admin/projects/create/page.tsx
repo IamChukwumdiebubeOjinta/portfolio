@@ -358,6 +358,9 @@ export default function CreateProject() {
                   value={formData.imageUrl}
                   onChange={(url) => setFormData(prev => ({ ...prev, imageUrl: url }))}
                   placeholder='Upload project image'
+                  type="project"
+                  imageType="thumbnail"
+                  slug={formData.slug}
                 />
               </CardContent>
             </Card>

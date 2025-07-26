@@ -85,7 +85,8 @@ export default function EditProject() {
         if (!response.ok) {
           throw new Error('Failed to fetch project');
         }
-        const project = await response.json();
+        const result = await response.json();
+        const project = result.data;
         
         setFormData({
           title: project.title || '',
@@ -446,6 +447,9 @@ export default function EditProject() {
                   value={formData.imageUrl}
                   onChange={(url) => setFormData(prev => ({ ...prev, imageUrl: url }))}
                   placeholder='Upload project image'
+                  type="project"
+                  imageType="thumbnail"
+                  slug={formData.slug}
                 />
               </CardContent>
             </Card>

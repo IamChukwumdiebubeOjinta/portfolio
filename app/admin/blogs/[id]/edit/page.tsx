@@ -82,7 +82,8 @@ export default function EditBlog() {
         if (!response.ok) {
           throw new Error('Failed to fetch blog post');
         }
-        const blog = await response.json();
+        const result = await response.json();
+        const blog = result.data;
         
         setFormData({
           title: blog.title || '',
@@ -386,6 +387,9 @@ export default function EditBlog() {
                   value={formData.featuredImage}
                   onChange={(url) => setFormData(prev => ({ ...prev, featuredImage: url }))}
                   placeholder='Upload featured image'
+                  type="blog"
+                  imageType="featured"
+                  slug={formData.slug}
                 />
               </CardContent>
             </Card>
