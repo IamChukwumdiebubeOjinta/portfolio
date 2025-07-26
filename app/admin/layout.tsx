@@ -1,6 +1,7 @@
 import { AdminSidebar } from '@/components/views/admin/admin-sidebar';
 import { AdminHeader } from '@/components/views/admin/admin-header';
 import { SessionExpiryNotification } from '@/components/session-expiry-notification';
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 
 export default function AdminLayout({
   children,
@@ -8,17 +9,19 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className='min-h-screen bg-background'>
-      <SessionExpiryNotification />
-      <div className='flex'>
+    <SidebarProvider defaultOpen={true}>
+      <div className='min-h-screen bg-background flex w-full'>
+        <SessionExpiryNotification />
         <AdminSidebar />
-        <div className='flex-1 flex flex-col'>
-          <AdminHeader />
-          <main className='flex-1 p-6'>
+        <SidebarInset className='flex-1 flex flex-col min-w-0'>
+          <div className='fixed top-0 right-0 left-0 z-50 md:left-64'>
+            <AdminHeader />
+          </div>
+          <main className='flex-1 p-6 mt-16'>
             {children}
           </main>
-        </div>
+        </SidebarInset>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }

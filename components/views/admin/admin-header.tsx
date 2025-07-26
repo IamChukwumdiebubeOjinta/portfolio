@@ -1,10 +1,12 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Bell, ExternalLink, Moon, Sun, LogOut, User } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useSession } from '@/hooks/use-session';
+import { SidebarTrigger } from '@/components/ui/sidebar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,11 +19,18 @@ import {
 export function AdminHeader() {
   const { theme, setTheme } = useTheme();
   const { user, loading, logout } = useSession();
+  const [mounted, setMounted] = useState(false);
+
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <header className='h-16 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
       <div className='flex items-center justify-between px-6 h-full'>
         <div className='flex items-center gap-4'>
+          <SidebarTrigger className='md:hidden' />
           <Badge variant='outline' className='gap-1'>
             <div className='w-2 h-2 bg-green-500 rounded-full' />
             Portfolio Live
@@ -42,7 +51,7 @@ export function AdminHeader() {
             size='icon'
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
           >
-            {theme === 'dark' ? (
+            {mounted && theme === 'dark' ? (
               <Sun className='h-4 w-4' />
             ) : (
               <Moon className='h-4 w-4' />
@@ -50,7 +59,7 @@ export function AdminHeader() {
           </Button>
 
           {/* User Menu */}
-          {!loading && user && (
+          {mounted && !loading && user && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant='ghost' size='icon'>

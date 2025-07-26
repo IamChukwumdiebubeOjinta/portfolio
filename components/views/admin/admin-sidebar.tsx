@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
   LayoutDashboard,
@@ -10,16 +9,28 @@ import {
   Settings,
   LogOut,
   User,
+  ChevronRight,
 } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { usePathname, useRouter } from 'next/navigation';
 import { useSession } from '@/hooks/use-session';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarGroup,
+  SidebarGroupLabel,
+} from '@/components/ui/sidebar';
 
 interface NavigationItem {
   name: string;
   href: string;
   icon: React.ComponentType<any>;
   count?: number;
+  description?: string;
 }
 
 export function AdminSidebar() {
@@ -31,10 +42,28 @@ export function AdminSidebar() {
       name: 'Dashboard',
       href: '/admin/dashboard',
       icon: LayoutDashboard,
+      description: 'Overview and analytics',
     },
-    { name: 'Projects', href: '/admin/projects', icon: FolderOpen, count: 0 },
-    { name: 'Blog', href: '/admin/blogs', icon: FileText, count: 0 },
-    { name: 'Settings', href: '/admin/settings', icon: Settings },
+    { 
+      name: 'Projects', 
+      href: '/admin/projects', 
+      icon: FolderOpen, 
+      count: 0,
+      description: 'Manage portfolio projects',
+    },
+    { 
+      name: 'Blog', 
+      href: '/admin/blogs', 
+      icon: FileText, 
+      count: 0,
+      description: 'Create and edit blog posts',
+    },
+    { 
+      name: 'Settings', 
+      href: '/admin/settings', 
+      icon: Settings,
+      description: 'Configure your portfolio',
+    },
   ]);
 
   // Fetch counts for projects and blogs
@@ -85,61 +114,84 @@ export function AdminSidebar() {
   };
 
   return (
-    <div className='w-64 bg-card border-r border-border h-screen flex flex-col'>
-      {/* Header */}
-      <div className='p-6 border-b border-border'>
+    <Sidebar>
+      <SidebarHeader className="border-b border-border/50 px-6 py-[0.6rem]">
         <div className='flex items-center gap-3'>
-          <div className='w-8 h-8 bg-primary rounded-lg flex items-center justify-center'>
-            <User className='h-4 w-4 text-primary-foreground' />
+          <div className='w-10 h-10 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-lg'>
+            <User className='h-5 w-5 text-primary-foreground' />
           </div>
-          <div>
-            <h2 className='font-semibold'>Admin Panel</h2>
-            <p className='text-sm text-muted-foreground'>
-              {user?.username || 'Admin'}
+          <div className='flex-1 min-w-0'>
+            <h2 className='font-semibold text-base text-foreground'>Admin Panel</h2>
+            <p className='text-sm text-muted-foreground truncate'>
+              {user?.username || 'Administrator'}
             </p>
           </div>
         </div>
-      </div>
+      </SidebarHeader>
 
-      {/* Navigation */}
-      <nav className='flex-1 p-4'>
-        <ul className='space-y-2'>
-          {navigation.map((item, index) => (
-            <motion.li
-              key={item.name}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-            >
-              <Button
-                variant={pathname === item.href ? 'default' : 'ghost'}
-                className='w-full justify-start gap-3'
-                onClick={() => handleNavigation(item.href)}
-              >
-                <item.icon className='h-4 w-4' />
-                <span className='flex-1 text-left'>{item.name}</span>
-                {item.count !== undefined && (
-                  <Badge variant='secondary' className='text-xs'>
-                    {item.count}
-                  </Badge>
-                )}
-              </Button>
-            </motion.li>
-          ))}
-        </ul>
-      </nav>
+      <SidebarContent className="px-3 py-4">
+        <SidebarGroup>
+          <SidebarGroupLabel className="px-3 mb-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+            Navigation
+          </SidebarGroupLabel>
+          <SidebarMenu>
+            {navigation.map((item) => (
+              <SidebarMenuItem key={item.name}>
+                <SidebarMenuButton
+                  isActive={pathname === item.href}
+                  onClick={() => handleNavigation(item.href)}
+                  tooltip={item.name}
+                  className="group relative h-auto"
+                >
+                  <div className="flex items-center gap-3 w-full">
+                    <div className={`p-1.5 rounded-lg transition-colors ${
+                      pathname === item.href 
+                        ? 'bg-primary/10 text-primary' 
+                        : 'text-muted-foreground group-hover:text-foreground'
+                    }`}>
+                      <item.icon className='h-4 w-4' />
+                    </div>
+                    <div className="flex-1 min-w-0 gap-2 flex flex-col">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">{item.name}</span>
+                        {item.count !== undefined && (
+                          <Badge variant='secondary' className='text-xs font-medium'>
+                            {item.count}
+                          </Badge>
+                        )}
+                      </div>
+                      {item.description && (
+                        <p className="text-xs text-muted-foreground truncate">
+                          {item.description}
+                        </p>
+                      )}
+                    </div>
+                    {pathname === item.href && (
+                      <ChevronRight className="h-4 w-4 text-primary ml-auto" />
+                    )}
+                  </div>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+      </SidebarContent>
 
-      {/* Footer */}
-      <div className='p-4 border-t border-border'>
-        <Button
-          variant='ghost'
-          className='w-full justify-start gap-3 text-destructive'
+      <SidebarFooter className="border-t border-border/50 p-4">
+        <SidebarMenuButton
           onClick={handleSignOut}
+          tooltip="Sign Out"
+          className="text-destructive hover:text-destructive hover:bg-destructive/10 transition-colors"
         >
-          <LogOut className='h-4 w-4' />
-          Sign Out
-        </Button>
-      </div>
-    </div>
+          <div className="p-1.5 rounded-lg bg-destructive/10 text-destructive">
+            <LogOut className='h-4 w-4' />
+          </div>
+          <div className="flex-1 text-left">
+            <span className="font-medium">Sign Out</span>
+            <p className="text-xs text-muted-foreground">End your session</p>
+          </div>
+        </SidebarMenuButton>
+      </SidebarFooter>
+    </Sidebar>
   );
 }

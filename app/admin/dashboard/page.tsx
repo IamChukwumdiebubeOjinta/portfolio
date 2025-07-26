@@ -14,8 +14,6 @@ import {
   FolderOpen,
   FileText,
   Settings,
-  Eye,
-  Users,
   TrendingUp,
   Plus,
   Edit,
