@@ -5,6 +5,7 @@ import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
+import Head from 'next/head';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -35,7 +36,6 @@ export const metadata: Metadata = {
     description: 'Building modern, intelligent, user-first digital experiences',
     type: 'website',
   },
-  generator: 'v0.dev',
 };
 
 export default function RootLayout({
@@ -45,7 +45,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <head>
+      <Head>
         <link rel='preconnect' href='https://fonts.googleapis.com' />
         <link
           rel='preconnect'
@@ -56,7 +56,7 @@ export default function RootLayout({
           href='https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap'
           rel='stylesheet'
         />
-      </head>
+      </Head>
       <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans`}>
         <ThemeProvider
           attribute='class'
