@@ -3,6 +3,10 @@
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Github, Linkedin, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
+
+
+const profilePicture = '/images/profile/ebube-headshot.jpg';
 
 export function Hero() {
   return (
@@ -50,7 +54,7 @@ export function Hero() {
             <h1 className='text-4xl md:text-5xl lg:text-6xl font-bold mb-6'>
               Hello, I'm{' '}
               <span className='bg-gradient-to-r from-primary via-primary to-secondary bg-clip-text text-transparent'>
-                Ebube Ojinta
+                Chukwumdiebube Ojinta
               </span>
             </h1>
             <h2 className='text-xl md:text-2xl font-semibold mb-4 text-muted-foreground'>
@@ -58,10 +62,11 @@ export function Hero() {
             </h2>
             <p className='text-lg text-muted-foreground mb-8 leading-relaxed'>
               I build modern, intelligent, user-first digital experiences using{' '}
+              <span className='text-primary font-medium'>Next.js</span>,{' '}
               <span className='text-primary font-medium'>Remix</span>,{' '}
-              <span className='text-primary font-medium'>React</span>, and{' '}
+              <span className='text-primary font-medium'>React</span>,{' '} 
               <span className='text-secondary font-medium'>
-                AI-native systems
+                and other web technologies.
               </span>
               .
             </p>
@@ -133,9 +138,14 @@ export function Hero() {
           >
             <div className='relative'>
               <div className='w-80 h-80 rounded-2xl overflow-hidden border-4 border-primary/20 shadow-chelsea hover:shadow-chelsea-accent transition-chelsea'>
-                <img
-                  src='/placeholder.svg?height=320&width=320'
+                <Image
+                  src={profilePicture}
                   alt='Chukwumdiebube Ojinta'
+                  quality={100}
+                  width={320}
+                  height={320}
+                  priority
+                  sizes='320px'
                   className='w-full h-full object-cover'
                 />
               </div>

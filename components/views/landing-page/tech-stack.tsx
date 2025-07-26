@@ -114,49 +114,6 @@ const technologies = [
     category: 'Real-time',
     hasIcon: true,
   },
-  // Additional technologies for the expanded view
-  {
-    name: 'Cypress',
-    icon: '/images/logos/icon-cypress.svg',
-    category: 'Testing',
-    hasIcon: true,
-  },
-  {
-    name: 'Storybook',
-    icon: '/images/logos/icon-storybook.svg',
-    category: 'Development',
-    hasIcon: true,
-  },
-  {
-    name: 'Sass',
-    icon: '/images/logos/icon-sass.svg',
-    category: 'Styling',
-    hasIcon: true,
-  },
-  {
-    name: 'Upwork',
-    icon: '/images/logos/logo-upwork.svg',
-    category: 'Platform',
-    hasIcon: true,
-  },
-  {
-    name: 'Cypress',
-    icon: '/images/logos/icon-cypress-light.svg',
-    category: 'Testing',
-    hasIcon: true,
-  },
-  {
-    name: 'Express',
-    icon: '/images/logos/icon-express-light.svg',
-    category: 'Backend',
-    hasIcon: true,
-  },
-  {
-    name: 'Socket.io',
-    icon: '/images/logos/icon-socket-light.svg',
-    category: 'Real-time',
-    hasIcon: true,
-  },
 ];
 
 const INITIAL_ITEMS_COUNT = 12;
