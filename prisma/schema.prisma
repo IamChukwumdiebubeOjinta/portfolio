@@ -134,11 +134,15 @@ model Project {
 
 model ProjectImage {
   id        String   @id @default(cuid())
-  url       String
+  url       String   // Path relative to public directory (e.g., "/images/projects/thumbnails/project-slug-thumbnail.jpg")
   alt       String?
   caption   String?
+  type      String   @default("gallery") // "thumbnail", "gallery", "logo"
   order     Int      @default(0)
   isPrimary Boolean  @default(false)
+  width     Int?     // Image width in pixels
+  height    Int?     // Image height in pixels
+  fileSize  Int?     // File size in bytes
   createdAt DateTime @default(now())
   
   // Relations
@@ -147,9 +151,11 @@ model ProjectImage {
   
   @@map("project_images")
   @@index([projectId])
+  @@index([type])
   @@index([isPrimary])
   @@index([order])
   @@index([createdAt])
+  @@index([projectId, type])
 }
 
 model ProjectTag {
@@ -199,6 +205,7 @@ model Blog {
   // Relations
   authorId    String
   author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  images      BlogImage[]
   tags        BlogTag[]
   
   @@map("blogs")
@@ -212,6 +219,32 @@ model Blog {
   @@index([updatedAt])
   @@index([isPublished, isFeatured])
   @@index([status, isPublished])
+}
+
+model BlogImage {
+  id        String   @id @default(cuid())
+  url       String   // Path relative to public directory (e.g., "/images/blogs/thumbnails/blog-slug-thumbnail.jpg")
+  alt       String?
+  caption   String?
+  type      String   @default("content") // "thumbnail", "featured", "content"
+  order     Int      @default(0)
+  isPrimary Boolean  @default(false)
+  width     Int?     // Image width in pixels
+  height    Int?     // Image height in pixels
+  fileSize  Int?     // File size in bytes
+  createdAt DateTime @default(now())
+  
+  // Relations
+  blogId    String
+  blog      Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  
+  @@map("blog_images")
+  @@index([blogId])
+  @@index([type])
+  @@index([isPrimary])
+  @@index([order])
+  @@index([createdAt])
+  @@index([blogId, type])
 }
 
 model BlogTag {
