@@ -1,19 +1,19 @@
-import { Outlet } from "@remix-run/react"
-import { AdminSidebar } from "@/components/admin/admin-sidebar"
-import { AdminHeader } from "@/components/admin/admin-header"
+import { Outlet } from '@remix-run/react';
+import { AdminSidebar } from '@/components/admin/admin-sidebar';
+import { AdminHeader } from '@/components/admin/admin-header';
 
 export default function AdminLayout() {
   return (
-    <div className="min-h-screen bg-background">
-      <div className="flex">
+    <div className='min-h-screen bg-background'>
+      <div className='flex'>
         <AdminSidebar />
-        <div className="flex-1 flex flex-col">
+        <div className='flex-1 flex flex-col'>
           <AdminHeader />
-          <main className="flex-1 p-6">
+          <main className='flex-1 p-6'>
             <Outlet />
           </main>
         </div>
       </div>
     </div>
-  )
+  );
 }
