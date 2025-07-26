@@ -1,16 +1,38 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { getSessionFromRequest, isSessionExpired } from '@/lib/session';
 
-export function middleware(request: NextRequest) {
-  // Check if the request is for admin routes
-  if (request.nextUrl.pathname.startsWith('/admin')) {
-    // Skip middleware for login page
-    if (request.nextUrl.pathname === '/login') {
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Handle admin routes
+  if (pathname.startsWith('/admin')) {
+    // Allow access to login page
+    if (pathname === '/login') {
       return NextResponse.next();
     }
 
-    // Check for admin session (you can implement proper session checking here)
-    // For now, we'll allow access and let individual pages handle auth
+    // Check for valid session
+    const session = await getSessionFromRequest(request);
+    
+    if (!session || isSessionExpired(session)) {
+      // Session is invalid or expired, redirect to login
+      return NextResponse.redirect(new URL('/login', request.url));
+    }
+
+    // Session is valid, allow access
+    return NextResponse.next();
+  }
+
+  // Handle login page - if user has valid session, redirect to admin dashboard
+  if (pathname === '/login') {
+    const session = await getSessionFromRequest(request);
+    
+    if (session && !isSessionExpired(session)) {
+      // User is already logged in, redirect to admin dashboard
+      return NextResponse.redirect(new URL('/admin/dashboard', request.url));
+    }
+
     return NextResponse.next();
   }
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { compare } from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
+import { createSession } from '@/lib/session';
 
 export async function POST(request: NextRequest) {
   try {
@@ -44,17 +45,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create session or token (you can implement JWT here)
-    const sessionData = {
+    // Create session token
+    const sessionToken = await createSession({
       userId: user.id,
       username: user.username,
       email: user.email,
       role: user.role,
-    };
+    });
 
-    // For now, we'll return success with user data
-    // In production, you should implement proper session management
-    return NextResponse.json({
+    // Create response with session cookie
+    const response = NextResponse.json({
       success: true,
       user: {
         id: user.id,
@@ -63,6 +63,17 @@ export async function POST(request: NextRequest) {
         role: user.role,
       },
     });
+
+    // Set HTTP-only cookie with session token
+    response.cookies.set('admin-session', sessionToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60, // 1 hour
+      path: '/',
+    });
+
+    return response;
 
   } catch (error) {
     console.error('Login error:', error);

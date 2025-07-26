@@ -42,10 +42,7 @@ export default function AdminLogin() {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        // Store user data in localStorage or sessionStorage for now
-        // In production, use proper session management
-        localStorage.setItem('adminUser', JSON.stringify(data.user));
-        
+        // Session cookie is automatically set by the server
         // Redirect to dashboard
         window.location.href = '/admin/dashboard';
       } else {
