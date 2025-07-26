@@ -1,27 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Badge } from '@/components/ui/badge';
-
-const skills = [
-  'Remix',
-  'Next.js',
-  'React',
-  'Vercel AI SDK',
-  'OpenAI',
-  'AI SDK Core',
-  'Prisma',
-  'PostgreSQL',
-  'FastAPI',
-  'Express',
-  'Docker',
-  'PM2',
-  'BullMQ',
-  'Redis',
-  'AWS (Cloud Practitioner Certified)',
-  'Team Leadership',
-  'Client Communication',
-];
 
 export function About() {
   return (
@@ -60,28 +39,6 @@ export function About() {
               Outside of code, I enjoy cooking, football, and building personal
               tools.
             </p>
-          </div>
-
-          <div>
-            <h3 className='text-xl font-semibold mb-6'>Key Skills</h3>
-            <div className='flex flex-wrap gap-3'>
-              {skills.map((skill, index) => (
-                <motion.div
-                  key={skill}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3, delay: index * 0.05 }}
-                  viewport={{ once: true }}
-                >
-                  <Badge
-                    variant='secondary'
-                    className='text-sm py-2 px-4 hover:bg-primary hover:text-primary-foreground transition-colors'
-                  >
-                    {skill}
-                  </Badge>
-                </motion.div>
-              ))}
-            </div>
           </div>
         </motion.div>
       </div>

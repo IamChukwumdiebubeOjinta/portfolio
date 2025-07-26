@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import {
   Card,
   CardContent,
@@ -46,8 +47,10 @@ const demos = [
 ];
 
 export function ProjectDemos() {
+  const router = useRouter();
+
   return (
-    <section id='demos' className='py-20 px-4 bg-muted/30'>
+    <section id='demos' className='py-20 px-4 '>
       <div className='max-w-6xl mx-auto'>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -151,10 +154,7 @@ export function ProjectDemos() {
             variant='outline'
             size='lg'
             className='gap-2 bg-transparent'
-            onClick={() => {
-              const element = document.querySelector('#all-projects');
-              element?.scrollIntoView({ behavior: 'smooth' });
-            }}
+            onClick={() => router.push('/projects')}
           >
             <Github className='h-5 w-5' />
             View All Projects

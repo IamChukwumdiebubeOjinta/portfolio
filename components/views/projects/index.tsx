@@ -37,7 +37,7 @@ const allProjectsData = [
   },
 ];
 
-export function AllProjects() {
+export function Projects() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
