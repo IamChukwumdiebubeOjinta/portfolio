@@ -9,7 +9,6 @@ import {
   FileText,
   Settings,
   LogOut,
-  BarChart3,
   User,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
