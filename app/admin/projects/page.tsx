@@ -44,7 +44,7 @@ export default function ProjectsManager() {
     deleteProject,
   } = useProjects({
     search: searchTerm || undefined,
-    status: selectedStatus || undefined,
+    status: selectedStatus as 'DRAFT' | 'PUBLISHED' | 'ARCHIVED' | undefined,
     limit: 20,
   });
 
@@ -167,7 +167,7 @@ export default function ProjectsManager() {
 
       {/* Projects Grid */}
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-        {data?.projects.map((project, index) => (
+        {data?.data.projects.map((project, index) => (
           <motion.div
             key={project.id}
             initial={{ opacity: 0, y: 20 }}
@@ -189,7 +189,7 @@ export default function ProjectsManager() {
                     <Switch
                       checked={project.isVisible}
                       onCheckedChange={() => toggleVisibility(project.id, project.isVisible)}
-                      size='sm'
+                      className='h-4 w-4'
                     />
                     {project.isVisible ? (
                       <Eye className='h-4 w-4 text-green-500' />
@@ -276,18 +276,18 @@ export default function ProjectsManager() {
       </div>
 
       {/* Pagination */}
-      {data?.pagination && data.pagination.totalPages > 1 && (
+      {data?.data.pagination && data.data.pagination.totalPages > 1 && (
         <div className='flex items-center justify-between'>
           <p className='text-sm text-muted-foreground'>
-            Showing {((data.pagination.page - 1) * data.pagination.limit) + 1} to{' '}
-            {Math.min(data.pagination.page * data.pagination.limit, data.pagination.total)} of{' '}
-            {data.pagination.total} projects
+            Showing {((data.data.pagination.page - 1) * data.data.pagination.limit) + 1} to{' '}
+            {Math.min(data.data.pagination.page * data.data.pagination.limit, data.data.pagination.total)} of{' '}
+            {data.data.pagination.total} projects
           </p>
           <div className='flex items-center gap-2'>
             <Button
               variant='outline'
               size='sm'
-              disabled={!data.pagination.hasPrev}
+              disabled={!data.data.pagination.hasPrev}
               onClick={() => {
                 // Handle pagination
                 console.log('Previous page');
@@ -298,7 +298,7 @@ export default function ProjectsManager() {
             <Button
               variant='outline'
               size='sm'
-              disabled={!data.pagination.hasNext}
+              disabled={!data.data.pagination.hasNext}
               onClick={() => {
                 // Handle pagination
                 console.log('Next page');
@@ -311,7 +311,7 @@ export default function ProjectsManager() {
       )}
 
       {/* Empty State */}
-      {data?.projects.length === 0 && (
+      {data?.data.projects.length === 0 && (
         <Card>
           <CardContent className='pt-6 text-center'>
             <p className='text-muted-foreground'>

@@ -5,42 +5,71 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Github } from 'lucide-react';
 import { ProjectCard } from '@/components/shared/project-card';
-
-const demos = [
-  {
-    title: 'WaveFound',
-    description:
-      'A platform for optimizing and marketing music across platforms with AI-powered insights and analytics.',
-    image: '/placeholder.svg?height=300&width=500',
-    tech: ['React', 'Node.js', 'PostgreSQL', 'Chart.js'],
-    demoUrl: '#',
-    githubUrl: '#',
-    status: 'Live',
-  },
-  {
-    title: 'WOTIF',
-    description:
-      'Task management and productivity app with intelligent scheduling and team collaboration features.',
-    image: '/placeholder.svg?height=300&width=500',
-    tech: ['Next.js', 'TypeScript', 'Prisma', 'Tailwind'],
-    demoUrl: '#',
-    githubUrl: '#',
-    status: 'Beta',
-  },
-  {
-    title: 'PaymentGateway',
-    description:
-      'Secure payment processing system with multi-currency support and fraud detection.',
-    image: '/placeholder.svg?height=300&width=500',
-    tech: ['FastAPI', 'PostgreSQL', 'Redis', 'Stripe API'],
-    demoUrl: '#',
-    githubUrl: '#',
-    status: 'Development',
-  },
-];
+import { useProjects } from '@/hooks/use-projects';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 
 export function ProjectDemos() {
   const router = useRouter();
+  const { data, loading, error } = useProjects({
+    visible: true,
+    status: 'PUBLISHED',
+    limit: 4,
+  });
+
+  if (loading) {
+    return (
+      <section id='demos' className='py-20 px-4 relative overflow-hidden'>
+        <div className='absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none' />
+        <div className='absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse' />
+        <div className='absolute bottom-1/4 right-1/4 w-80 h-80 bg-secondary/10 rounded-full blur-3xl animate-pulse delay-1000' />
+        <div className='max-w-6xl mx-auto'>
+          <div className='text-center mb-16'>
+            <h2 className='text-3xl md:text-4xl font-bold mb-4'>
+              Some of the noteworthy projects I have built
+            </h2>
+            <p className='text-lg text-muted-foreground max-w-2xl mx-auto'>
+              Interactive demos and live applications showcasing real-world solutions
+            </p>
+          </div>
+          <LoadingSkeleton type='stats' count={4} />
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section id='demos' className='py-20 px-4 relative overflow-hidden'>
+        <div className='absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none' />
+        <div className='absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse' />
+        <div className='absolute bottom-1/4 right-1/4 w-80 h-80 bg-secondary/10 rounded-full blur-3xl animate-pulse delay-1000' />
+        <div className='max-w-6xl mx-auto'>
+          <div className='text-center'>
+            <h2 className='text-3xl md:text-4xl font-bold mb-4'>
+              Some of the noteworthy projects I have built
+            </h2>
+            <p className='text-lg text-muted-foreground'>
+              Unable to load projects. Please try again later.
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  const projects = data?.data.projects || [];
+
+  // Transform API data to match ProjectCard interface
+  const demos = projects.map(project => ({
+    title: project.title,
+    description: project.excerpt || project.description,
+    image: project.imageUrl || '/placeholder.svg?height=300&width=500',
+    tech: project.techStack || [],
+    demoUrl: project.demoUrl,
+    githubUrl: project.githubUrl,
+    status: project.status === 'PUBLISHED' ? 'Live' : 
+            project.status === 'DRAFT' ? 'Development' : 'Beta',
+  }));
 
   return (
     <section id='demos' className='py-20 px-4 relative overflow-hidden'>
@@ -67,11 +96,19 @@ export function ProjectDemos() {
           </p>
         </motion.div>
 
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
-          {demos.map((demo, index) => (
-            <ProjectCard key={index} {...demo} />
-          ))}
-        </div>
+        {demos.length === 0 ? (
+          <div className='text-center py-12'>
+            <p className='text-muted-foreground'>
+              No projects available at the moment.
+            </p>
+          </div>
+        ) : (
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
+            {demos.map((demo, index) => (
+              <ProjectCard key={index} {...demo} />
+            ))}
+          </div>
+        )}
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
