@@ -12,6 +12,12 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+  		fontFamily: {
+  			sans: ['var(--font-inter)', 'Inter', 'sans-serif'],
+  			heading: ['var(--font-space-grotesk)', 'Space Grotesk', 'sans-serif'],
+  			'space-grotesk': ['Space Grotesk', 'sans-serif'],
+  			inter: ['Inter', 'sans-serif'],
+  		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
