@@ -3,9 +3,8 @@ import type { Metadata } from 'next';
 import { Inter, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
-import { Header } from '@/components/shared/header';
-import { Footer } from '@/components/shared/footer';
 import Head from 'next/head';
+import LayoutShell from '@/components/shared/LayoutShell';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -64,9 +63,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
-          <div className='pt-16'>{children}</div>
-          <Footer />
+          <LayoutShell>{children}</LayoutShell>
         </ThemeProvider>
       </body>
     </html>

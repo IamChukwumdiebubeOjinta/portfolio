@@ -13,22 +13,32 @@ import {
   User,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { usePathname, useRouter } from 'next/navigation';
 
 const navigation = [
   {
     name: 'Dashboard',
     href: '/admin/dashboard',
     icon: LayoutDashboard,
-    current: true,
   },
   { name: 'Projects', href: '/admin/projects', icon: FolderOpen, count: 12 },
   { name: 'Blog', href: '/admin/blogs', icon: FileText, count: 8 },
-  { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
+  // { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
   { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 
 export function AdminSidebar() {
-  const [currentPath, setCurrentPath] = useState('/admin/dashboard');
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const handleNavigation = (href: string) => {
+    router.push(href);
+  };
+
+  const handleSignOut = () => {
+    // Add sign out logic here
+    router.push('/login');
+  };
 
   return (
     <div className='w-64 bg-card border-r border-border h-screen flex flex-col'>
@@ -56,9 +66,9 @@ export function AdminSidebar() {
               transition={{ duration: 0.3, delay: index * 0.1 }}
             >
               <Button
-                variant={currentPath === item.href ? 'default' : 'ghost'}
+                variant={pathname === item.href ? 'default' : 'ghost'}
                 className='w-full justify-start gap-3'
-                onClick={() => setCurrentPath(item.href)}
+                onClick={() => handleNavigation(item.href)}
               >
                 <item.icon className='h-4 w-4' />
                 <span className='flex-1 text-left'>{item.name}</span>
@@ -78,6 +88,7 @@ export function AdminSidebar() {
         <Button
           variant='ghost'
           className='w-full justify-start gap-3 text-destructive'
+          onClick={handleSignOut}
         >
           <LogOut className='h-4 w-4' />
           Sign Out
