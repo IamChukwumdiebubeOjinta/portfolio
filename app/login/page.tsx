@@ -30,19 +30,33 @@ export default function AdminLogin() {
     setIsLoading(true);
     setError('');
 
-    // Simulate authentication
-    setTimeout(() => {
-      if (
-        credentials.username === 'admin' &&
-        credentials.password === 'LocoM0tive$$'
-      ) {
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        // Store user data in localStorage or sessionStorage for now
+        // In production, use proper session management
+        localStorage.setItem('adminUser', JSON.stringify(data.user));
+        
         // Redirect to dashboard
         window.location.href = '/admin/dashboard';
       } else {
-        setError('Invalid credentials');
+        setError(data.error || 'Invalid credentials');
       }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError('An error occurred during login');
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
