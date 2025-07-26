@@ -4,48 +4,50 @@
 
 @layer base {
   :root {
+    /* Chelsea Tech Design System - Light Mode (fallback) */
     --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    --foreground: 0 0% 4%;
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card-foreground: 0 0% 4%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 239 84% 67%;
+    --popover-foreground: 0 0% 4%;
+    --primary: 214 96% 33%; /* #0346a5 - Primary Blue */
     --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
+    --secondary: 48 100% 50%; /* #ffd100 - Secondary Yellow */
+    --secondary-foreground: 0 0% 4%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 48 100% 50%; /* #ffd100 - Secondary Yellow */
+    --accent-foreground: 0 0% 4%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 239 84% 67%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 214 96% 33%; /* #0346a5 - Primary Blue */
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 239 84% 67%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 239 84% 67%;
+    /* Chelsea Tech Design System - Dark Mode (primary) */
+    --background: 0 0% 4%; /* #0a0a0a - Dark Background */
+    --foreground: 0 0% 98%; /* #f9f9f9 - Text (Light) */
+    --card: 0 0% 10%; /* #1a1a1a - Surface */
+    --card-foreground: 0 0% 98%; /* #f9f9f9 - Text (Light) */
+    --popover: 0 0% 10%; /* #1a1a1a - Surface */
+    --popover-foreground: 0 0% 98%; /* #f9f9f9 - Text (Light) */
+    --primary: 214 96% 33%; /* #0346a5 - Primary Blue */
+    --primary-foreground: 0 0% 98%; /* #f9f9f9 - Text (Light) */
+    --secondary: 48 100% 50%; /* #ffd100 - Secondary Yellow */
+    --secondary-foreground: 0 0% 4%; /* #0a0a0a - Dark Background */
+    --muted: 0 0% 10%; /* #1a1a1a - Surface */
+    --muted-foreground: 0 0% 64%; /* #a3a3a3 - Text (Muted) */
+    --accent: 48 100% 50%; /* #ffd100 - Secondary Yellow */
+    --accent-foreground: 0 0% 4%; /* #0a0a0a - Dark Background */
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 98%; /* #f9f9f9 - Text (Light) */
+    --border: 0 0% 18%; /* #2e2e2e - Border */
+    --input: 0 0% 18%; /* #2e2e2e - Border */
+    --ring: 214 96% 33%; /* #0346a5 - Primary Blue */
   }
 }
 
@@ -69,5 +71,63 @@
 
   .bg-grid-16 {
     background-size: 16px 16px;
+  }
+
+  /* Chelsea Tech Design System Utilities */
+  .bg-chelsea-gradient {
+    background: linear-gradient(135deg, #0346a5 0%, #0a0a0a 100%);
+  }
+
+  .bg-chelsea-gradient-reverse {
+    background: linear-gradient(135deg, #0a0a0a 0%, #0346a5 100%);
+  }
+
+  .bg-chelsea-accent-gradient {
+    background: linear-gradient(135deg, #ffd100 0%, #0346a5 100%);
+  }
+
+  .text-chelsea-primary {
+    color: #0346a5;
+  }
+
+  .text-chelsea-secondary {
+    color: #ffd100;
+  }
+
+  .border-chelsea-primary {
+    border-color: #0346a5;
+  }
+
+  .border-chelsea-secondary {
+    border-color: #ffd100;
+  }
+
+  .shadow-chelsea {
+    box-shadow: 0 4px 20px rgba(3, 70, 165, 0.15);
+  }
+
+  .shadow-chelsea-accent {
+    box-shadow: 0 4px 20px rgba(255, 209, 0, 0.15);
+  }
+
+  /* Smooth animations for Chelsea Tech */
+  .transition-chelsea {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .hover-lift {
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-2px);
+  }
+
+  .hover-glow {
+    transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .hover-glow:hover {
+    box-shadow: 0 8px 30px rgba(3, 70, 165, 0.2);
   }
 }

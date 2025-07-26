@@ -34,7 +34,7 @@ export function Header() {
       <nav className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           <div className="flex-shrink-0">
-            <span className="text-xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+            <span className="text-xl font-bold bg-gradient-to-r from-primary via-primary to-secondary bg-clip-text text-transparent">
               CO
             </span>
           </div>
@@ -46,7 +46,7 @@ export function Header() {
                 <a
                   key={item.name}
                   href={item.href}
-                  className="text-muted-foreground hover:text-foreground transition-colors duration-200 text-sm font-medium"
+                  className="text-muted-foreground hover:text-primary transition-chelsea text-sm font-medium relative group"
                   onClick={(e) => {
                     e.preventDefault()
                     const element = document.querySelector(item.href)
@@ -54,18 +54,29 @@ export function Header() {
                   }}
                 >
                   {item.name}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-secondary transition-all duration-300 group-hover:w-full"></span>
                 </a>
               ))}
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="hover:bg-primary/10 hover:text-primary transition-chelsea"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            >
               {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
 
             {/* Mobile menu button */}
-            <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="md:hidden hover:bg-primary/10 hover:text-primary transition-chelsea" 
+              onClick={() => setIsOpen(!isOpen)}
+            >
               {isOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </Button>
           </div>
@@ -85,7 +96,7 @@ export function Header() {
                   <a
                     key={item.name}
                     href={item.href}
-                    className="block px-3 py-2 text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    className="block px-3 py-2 text-muted-foreground hover:text-primary hover:bg-primary/5 transition-chelsea rounded-md"
                     onClick={(e) => {
                       setIsOpen(false)
                       e.preventDefault()
