@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -13,30 +13,75 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { usePathname, useRouter } from 'next/navigation';
+import { useSession } from '@/hooks/use-session';
 
-const navigation = [
-  {
-    name: 'Dashboard',
-    href: '/admin/dashboard',
-    icon: LayoutDashboard,
-  },
-  { name: 'Projects', href: '/admin/projects', icon: FolderOpen, count: 12 },
-  { name: 'Blog', href: '/admin/blogs', icon: FileText, count: 8 },
-  // { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
-  { name: 'Settings', href: '/admin/settings', icon: Settings },
-];
+interface NavigationItem {
+  name: string;
+  href: string;
+  icon: React.ComponentType<any>;
+  count?: number;
+}
 
 export function AdminSidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const { user, logout } = useSession();
+  const [navigation, setNavigation] = useState<NavigationItem[]>([
+    {
+      name: 'Dashboard',
+      href: '/admin/dashboard',
+      icon: LayoutDashboard,
+    },
+    { name: 'Projects', href: '/admin/projects', icon: FolderOpen, count: 0 },
+    { name: 'Blog', href: '/admin/blogs', icon: FileText, count: 0 },
+    { name: 'Settings', href: '/admin/settings', icon: Settings },
+  ]);
+
+  // Fetch counts for projects and blogs
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        // Fetch dashboard overview data
+        const response = await fetch('/api/dashboard/overview');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success) {
+            const { stats } = data.dashboard;
+            
+            // Update navigation with real counts
+            setNavigation(prev => prev.map(item => {
+              if (item.name === 'Projects') {
+                const projectStat = stats.find((s: any) => s.title === 'Total Projects');
+                return { ...item, count: projectStat ? parseInt(projectStat.value) : 0 };
+              }
+              if (item.name === 'Blog') {
+                const blogStat = stats.find((s: any) => s.title === 'Blog Posts');
+                return { ...item, count: blogStat ? parseInt(blogStat.value) : 0 };
+              }
+              return item;
+            }));
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch navigation counts:', error);
+      }
+    };
+
+    fetchCounts();
+  }, []);
 
   const handleNavigation = (href: string) => {
     router.push(href);
   };
 
-  const handleSignOut = () => {
-    // Add sign out logic here
-    router.push('/login');
+  const handleSignOut = async () => {
+    try {
+      await logout();
+      router.push('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      router.push('/login');
+    }
   };
 
   return (
@@ -49,7 +94,9 @@ export function AdminSidebar() {
           </div>
           <div>
             <h2 className='font-semibold'>Admin Panel</h2>
-            <p className='text-sm text-muted-foreground'>Ebube Ojinta</p>
+            <p className='text-sm text-muted-foreground'>
+              {user?.username || 'Admin'}
+            </p>
           </div>
         </div>
       </div>
@@ -71,7 +118,7 @@ export function AdminSidebar() {
               >
                 <item.icon className='h-4 w-4' />
                 <span className='flex-1 text-left'>{item.name}</span>
-                {item.count && (
+                {item.count !== undefined && (
                   <Badge variant='secondary' className='text-xs'>
                     {item.count}
                   </Badge>
