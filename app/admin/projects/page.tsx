@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Card,
   CardContent,
@@ -31,8 +32,8 @@ import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import Image from 'next/image';
 
 export default function ProjectsManager() {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
-  const [showAddForm, setShowAddForm] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState<string>('');
 
   const {
@@ -130,7 +131,7 @@ export default function ProjectsManager() {
           <Button onClick={fetchProjects} variant='outline' size='sm'>
             <RefreshCw className='h-4 w-4' />
           </Button>
-          <Button onClick={() => setShowAddForm(true)} className='gap-2'>
+          <Button onClick={() => router.push('/admin/projects/create')} className='gap-2'>
             <Plus className='h-4 w-4' />
             Add Project
           </Button>
@@ -252,7 +253,11 @@ export default function ProjectsManager() {
                       </a>
                     </Button>
                   )}
-                  <Button variant='outline' size='sm'>
+                  <Button 
+                    variant='outline' 
+                    size='sm'
+                    onClick={() => router.push(`/admin/projects/${project.id}/edit`)}
+                  >
                     <Edit className='h-3 w-3' />
                   </Button>
                   <Button

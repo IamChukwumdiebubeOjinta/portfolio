@@ -148,10 +148,8 @@ export async function POST(request: NextRequest) {
         isFeatured: isFeatured ?? false,
         status: status || 'DRAFT',
         order: order || 0,
-        authorId: session.user.id,
-        tags: tagIds ? {
-          connect: tagIds.map((id: string) => ({ id })),
-        } : undefined,
+        authorId: session.userId,
+
         images: images ? {
           create: images.map((img: any, index: number) => ({
             url: img.url,

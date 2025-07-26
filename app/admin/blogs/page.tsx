@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Card,
   CardContent,
@@ -59,6 +60,7 @@ const mockBlogs = [
 ];
 
 export default function BlogManager() {
+  const router = useRouter();
   const [blogs, setBlogs] = useState(mockBlogs);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -88,7 +90,10 @@ export default function BlogManager() {
             Create and manage your blog posts
           </p>
         </div>
-        <Button className='gap-2'>
+        <Button 
+          className='gap-2'
+          onClick={() => router.push('/admin/blogs/create')}
+        >
           <Plus className='h-4 w-4' />
           New Post
         </Button>
@@ -163,7 +168,11 @@ export default function BlogManager() {
                     </div>
                   </div>
                   <div className='flex items-center gap-2'>
-                    <Button variant='ghost' size='icon'>
+                    <Button 
+                      variant='ghost' 
+                      size='icon'
+                      onClick={() => router.push(`/admin/blogs/${blog.id}/edit`)}
+                    >
                       <Edit className='h-4 w-4' />
                     </Button>
                     <Button

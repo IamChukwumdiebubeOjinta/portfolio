@@ -145,10 +145,9 @@ export async function POST(request: NextRequest) {
         featuredImage,
         readTime,
         publishedAt: isPublished ? new Date() : null,
-        authorId: session.user.id,
-        tags: tagIds ? {
-          connect: tagIds.map((id: string) => ({ id })),
-        } : undefined,
+        authorId: session.userId,
+        // Note: For now, we'll skip tags since the form sends tags as strings
+        // TODO: Implement tag creation/linking logic
         images: images ? {
           create: images.map((img: any, index: number) => ({
             url: img.url,
