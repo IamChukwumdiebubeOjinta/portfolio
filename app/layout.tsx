@@ -5,6 +5,7 @@ import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import Head from 'next/head';
 import LayoutShell from '@/components/shared/LayoutShell';
+import { Toaster } from '@/components/ui/toaster';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -64,6 +65,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <LayoutShell>{children}</LayoutShell>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

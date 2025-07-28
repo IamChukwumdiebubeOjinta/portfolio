@@ -29,9 +29,9 @@ export function About() {
             <p className='text-lg leading-relaxed mb-6'>
               I enjoy leading projects that mix user experience, system design,
               and AI. Recently, I've led the development of{' '}
-              <span className='text-primary font-medium'>Uloma</span> — a family
+              <span className='text-primary font-medium'>Uloma</span> - a family
               historian and AI chat companion built on Vercel AI SDK, Prisma,
-              and BullMQ — and I've worked with startups to transform their
+              and BullMQ, and I've worked with startups to transform their
               ideas into reality.
             </p>
 

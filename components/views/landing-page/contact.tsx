@@ -1,6 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import {
   Card,
   CardContent,
@@ -13,8 +17,75 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Mail, MessageSquare, Send, Phone } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { config } from '@/lib/config';
+
+// Validation schema
+const contactSchema = z.object({
+  name: z.string().min(1, 'Name is required').max(100, 'Name is too long'),
+  email: z.string().email('Invalid email address'),
+  subject: z.string().min(1, 'Subject is required').max(200, 'Subject is too long'),
+  message: z.string().min(10, 'Message must be at least 10 characters').max(2000, 'Message is too long'),
+});
+
+type ContactFormData = z.infer<typeof contactSchema>;
 
 export function Contact() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
+  });
+
+  const onSubmit = async (data: ContactFormData) => {
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        toast({
+          title: 'Message sent successfully!',
+          description: 'Check your email for confirmation.',
+          variant: 'default',
+        });
+        reset(); // Clear the form
+      } else {
+        toast({
+          title: 'Failed to send message',
+          description: result.error || 'Please try again later.',
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      toast({
+        title: 'Network error',
+        description: 'Please check your connection and try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const recipient = config.contact.email;
+  const subject = config.contact.subject;
+  const body = config.contact.body;
+
   return (
     <section id='contact' className='py-20 px-4 bg-muted/30'>
       <div className='max-w-4xl mx-auto'>
@@ -50,36 +121,77 @@ export function Contact() {
                 </CardDescription>
               </CardHeader>
               <CardContent className='space-y-4'>
-                <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-                  <div className='space-y-2'>
-                    <Label htmlFor='name'>Name</Label>
-                    <Input id='name' placeholder='Your name' />
+                <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
+                  <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+                    <div className='space-y-2'>
+                      <Label htmlFor='name'>Name</Label>
+                      <Input
+                        id='name'
+                        placeholder='Your name'
+                        {...register('name')}
+                        className={errors.name ? 'border-red-500' : ''}
+                      />
+                      {errors.name && (
+                        <p className='text-sm text-red-500'>{errors.name.message}</p>
+                      )}
+                    </div>
+                    <div className='space-y-2'>
+                      <Label htmlFor='email'>Email</Label>
+                      <Input
+                        id='email'
+                        type='email'
+                        placeholder='your@email.com'
+                        {...register('email')}
+                        className={errors.email ? 'border-red-500' : ''}
+                      />
+                      {errors.email && (
+                        <p className='text-sm text-red-500'>{errors.email.message}</p>
+                      )}
+                    </div>
                   </div>
                   <div className='space-y-2'>
-                    <Label htmlFor='email'>Email</Label>
+                    <Label htmlFor='subject'>Subject</Label>
                     <Input
-                      id='email'
-                      type='email'
-                      placeholder='your@email.com'
+                      id='subject'
+                      placeholder='Project discussion'
+                      {...register('subject')}
+                      className={errors.subject ? 'border-red-500' : ''}
                     />
+                    {errors.subject && (
+                      <p className='text-sm text-red-500'>{errors.subject.message}</p>
+                    )}
                   </div>
-                </div>
-                <div className='space-y-2'>
-                  <Label htmlFor='subject'>Subject</Label>
-                  <Input id='subject' placeholder='Project discussion' />
-                </div>
-                <div className='space-y-2'>
-                  <Label htmlFor='message'>Message</Label>
-                  <Textarea
-                    id='message'
-                    placeholder='Tell me about your project...'
-                    className='min-h-[120px]'
-                  />
-                </div>
-                <Button className='w-full group'>
-                  Send Message
-                  <Send className='ml-2 h-4 w-4 transition-transform group-hover:translate-x-1' />
-                </Button>
+                  <div className='space-y-2'>
+                    <Label htmlFor='message'>Message</Label>
+                    <Textarea
+                      id='message'
+                      placeholder='Tell me about your project...'
+                      className={`min-h-[120px] resize-none ${errors.message ? 'border-red-500' : ''}`}
+                      {...register('message')}
+                    />
+                    {errors.message && (
+                      <p className='text-sm text-red-500'>{errors.message.message}</p>
+                    )}
+                  </div>
+
+                  <Button 
+                    type='submit' 
+                    className='w-full group' 
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2' />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        Send Message
+                        <Send className='ml-2 h-4 w-4 transition-transform group-hover:translate-x-1' />
+                      </>
+                    )}
+                  </Button>
+                </form>
               </CardContent>
             </Card>
           </motion.div>
@@ -103,8 +215,10 @@ export function Contact() {
                   Prefer to reach out directly? Send me an email and I'll
                   respond as soon as possible.
                 </p>
-                <Button variant='outline' className='w-full bg-transparent'>
-                  hello@ojinta.dev
+                <Button variant='outline' className='w-full bg-transparent' onClick={() => {
+                  window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+                }}>
+                  {config.personal.email}
                 </Button>
               </CardContent>
             </Card>
@@ -156,11 +270,11 @@ export function Contact() {
         <div className='flex flex-col sm:flex-row gap-4 justify-center items-center'>
           <Button variant='outline' size='lg' className='gap-2 bg-transparent'>
             <Mail className='h-5 w-5' />
-            chukwumdiebubeojiinta@gmail.com
+            {config.personal.email}
           </Button>
           <Button variant='outline' size='lg' className='gap-2 bg-transparent'>
             <Phone className='h-5 w-5' />
-            +234 8100610538
+            {config.personal.phone}
           </Button>
         </div>
       </motion.div>

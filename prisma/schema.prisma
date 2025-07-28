@@ -46,6 +46,7 @@ enum ActivityType {
   BLOG_DELETED
   SETTING_CHANGED
   FEATURE_TOGGLED
+  CONTACT_SUBMITTED
 }
 
 enum SettingType {

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, Github, Linkedin, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { config } from '@/lib/config';
 
 const profilePicture = '/images/profile/ebube-headshot.jpg';
 
@@ -109,6 +110,7 @@ export function Hero() {
                 variant='ghost'
                 size='icon'
                 className='hover:text-primary hover:bg-primary/10 transition-chelsea'
+                onClick={() => window.open(config.social.github, '_blank')}
               >
                 <Github className='h-5 w-5' />
               </Button>
@@ -116,13 +118,15 @@ export function Hero() {
                 variant='ghost'
                 size='icon'
                 className='hover:text-primary hover:bg-primary/10 transition-chelsea'
+                onClick={() => window.open(config.social.linkedin, '_blank')}
               >
-                <Linkedin className='h-5 w-5' />
+                <Linkedin className='h-5 w-5' />  
               </Button>
               <Button
                 variant='ghost'
                 size='icon'
                 className='hover:text-secondary hover:bg-secondary/10 transition-chelsea'
+                onClick={() => window.open(`mailto:${config.email.replyTo}`, '_blank')}
               >
                 <Mail className='h-5 w-5' />
               </Button>
