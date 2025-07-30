@@ -1,22 +1,10 @@
 import type React from 'react';
 import type { Metadata } from 'next';
-import { Inter, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
-import Head from 'next/head';
 import LayoutShell from '@/components/shared/LayoutShell';
 import { Toaster } from '@/components/ui/toaster';
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-space-grotesk',
-});
+import { inter, spaceGrotesk } from '@/lib/fonts';
 
 export const metadata: Metadata = {
   title: 'Chukwumdiebube Ojinta - Full-Stack Engineer & AI Systems Architect',
@@ -45,18 +33,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <Head>
-        <link rel='preconnect' href='https://fonts.googleapis.com' />
-        <link
-          rel='preconnect'
-          href='https://fonts.gstatic.com'
-          crossOrigin='anonymous'
-        />
-        <link
-          href='https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap'
-          rel='stylesheet'
-        />
-      </Head>
       <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans`}>
         <ThemeProvider
           attribute='class'
