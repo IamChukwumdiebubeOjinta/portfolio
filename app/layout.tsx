@@ -1,61 +1,40 @@
-import Script from 'next/script';
-import { Inter, Goldman } from 'next/font/google';
-import { Metadata } from 'next';
-
+import type React from 'react';
+import type { Metadata } from 'next';
+import { Analytics } from '@vercel/analytics/next';
+import * as Sentry from '@sentry/nextjs';
 import './globals.css';
-import Header from '@/components/layout/header';
-import { Providers } from '@/lib/providers';
-import Footer from '@/components/layout/footer';
+import { ThemeProvider } from '@/components/theme-provider';
+import LayoutShell from '@/components/shared/LayoutShell';
+import { Toaster } from '@/components/ui/toaster';
+import { inter, spaceGrotesk } from '@/lib/fonts';
+import ErrorBoundary from '@/components/error-boundary';
 
-const goldMan = Goldman({weight: "400" , subsets: ['latin']  })
-
-const title = 'Ebube Ojinta | Full Stack Developer.';
-const description =
-  'A cool dude who specializes in full stack development (React.js & Node.js).';
-const url = 'https://sagarshah.dev';
-
-export const metadata: Metadata = {
-  metadataBase: new URL(url),
-  title,
-  description,
-  keywords: [
-    'Frontend Developer',
-    'Full Stack Developer',
-    'React Developer',
-    'Next.js Developer',
-  ],
-  creator: 'Chukwumdiebube Ojinta',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: 'white' },
-    { media: '(prefers-color-scheme: dark)', color: 'black' },
-  ],
-  openGraph: {
-    type: 'website',
-    url,
-    title,
-    description,
-    siteName: title,
-    images: [
-      {
-        url: '/images/open-graph-sagar.png',
-      },
+export function generateMetadata(): Metadata {
+  return {
+    title: 'Chukwumdiebube Ojinta - Full-Stack Engineer & AI Systems Architect',
+    description:
+      'Portfolio of Chukwumdiebube Ojinta, a full-stack engineer specializing in AI-powered applications, Remix, React, and modern web technologies.',
+    keywords: [
+      'Full-Stack Engineer',
+      'AI Systems',
+      'React',
+      'Remix',
+      'Next.js',
+      'TypeScript',
     ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title,
-    description,
-    creator: '@shahsagarm',
-    images: '/images/open-graph-sagar.png',
-  },
-  icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon-16x16.png',
-    apple: '/apple-touch-icon.png',
-  },
-};
-
-const googleAnalyticsId = process.env.GOOGLE_ANALYTICS_ID;
+    authors: [{ name: 'Chukwumdiebube Ojinta' }],
+    openGraph: {
+      title:
+        'Chukwumdiebube Ojinta - Full-Stack Engineer & AI Systems Architect',
+      description:
+        'Building modern, intelligent, user-first digital experiences',
+      type: 'website',
+    },
+    other: {
+      ...Sentry.getTraceData(),
+    },
+  };
+}
 
 export default function RootLayout({
   children,
@@ -63,30 +42,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="!scroll-smooth" suppressHydrationWarning>
-      {googleAnalyticsId ? (
-        <head>
-          <Script
-            async
-            src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`}
-          ></Script>
-          <Script id="google-anayltics-script">
-            {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-          
-            gtag('config', '${googleAnalyticsId}');
-          `}
-          </Script>
-        </head>
-      ) : null}
-      <body className={`${goldMan.className} bg-gray text-gray-600 antialiased`}>
-        <Providers>
-          <Header />
-          <main className="flex min-h-screen w-full flex-col">{children}</main>
-          <Footer />
-        </Providers>
+    <html lang='en' suppressHydrationWarning>
+      <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans`}>
+        <ErrorBoundary>
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='dark'
+            enableSystem
+            disableTransitionOnChange
+          >
+            <LayoutShell>{children}</LayoutShell>
+            <Toaster />
+          </ThemeProvider>
+        </ErrorBoundary>
+        <Analytics />
       </body>
     </html>
   );
