@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSessionFromRequest, isSessionExpired } from '@/lib/session';
 
+// Force dynamic rendering since this route uses cookies for authentication
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     // Check authentication
@@ -13,130 +16,149 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { searchParams } = new URL(request.url);
-    const period = searchParams.get('period') || '7d'; // 7d, 30d, 90d
-
-    // Calculate date range based on period
+    // Get current date for calculations
     const now = new Date();
-    let startDate: Date;
-    
-    switch (period) {
-      case '30d':
-        startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-        break;
-      case '90d':
-        startDate = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
-        break;
-      default: // 7d
-        startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-    }
+    const thisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const thisWeek = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
 
     // Fetch analytics data
     const [
       totalPageViews,
-      periodPageViews,
+      thisMonthPageViews,
+      thisWeekPageViews,
+      lastMonthPageViews,
       topPages,
-      dailyViews,
       uniqueVisitors,
-      referrers,
+      pageViewsByDay,
+      projectViews,
+      blogViews,
     ] = await Promise.all([
       // Total page views
       prisma.pageView.count(),
       
-      // Page views in period
-      prisma.pageView.count({
-        where: { createdAt: { gte: startDate } },
+      // This month's page views
+      prisma.pageView.count({ 
+        where: { createdAt: { gte: thisMonth } } 
       }),
       
-      // Top pages by views
+      // This week's page views
+      prisma.pageView.count({ 
+        where: { createdAt: { gte: thisWeek } } 
+      }),
+      
+      // Last month's page views
+      prisma.pageView.count({ 
+        where: { 
+          createdAt: { 
+            gte: lastMonth,
+            lt: thisMonth 
+          } 
+        } 
+      }),
+      
+      // Top pages
       prisma.pageView.groupBy({
         by: ['path'],
-        where: { createdAt: { gte: startDate } },
         _count: { path: true },
         orderBy: { _count: { path: 'desc' } },
         take: 10,
       }),
       
-      // Daily page views for chart
-      prisma.$queryRaw`
-        SELECT 
-          DATE(created_at) as date,
-          COUNT(*) as views
-        FROM page_views 
-        WHERE created_at >= ${startDate}
-        GROUP BY DATE(created_at)
-        ORDER BY date ASC
-      `,
-      
-      // Unique visitors (by IP)
+      // Unique visitors this month
       prisma.pageView.groupBy({
         by: ['ipAddress'],
         where: { 
-          createdAt: { gte: startDate },
+          createdAt: { gte: thisMonth },
           ipAddress: { not: null }
         },
         _count: { ipAddress: true },
       }),
       
-      // Top referrers
-      prisma.pageView.groupBy({
-        by: ['referrer'],
-        where: { 
-          createdAt: { gte: startDate },
-          referrer: { not: null }
+      // Page views by day (last 30 days)
+      prisma.$queryRaw`
+        SELECT 
+          DATE(created_at) as date,
+          COUNT(*) as views
+        FROM page_views 
+        WHERE created_at >= NOW() - INTERVAL '30 days'
+        GROUP BY DATE(created_at)
+        ORDER BY date DESC
+      `,
+      
+      // Project views
+      prisma.project.findMany({
+        select: {
+          id: true,
+          title: true,
+          views: true,
         },
-        _count: { referrer: true },
-        orderBy: { _count: { referrer: 'desc' } },
+        orderBy: { views: 'desc' },
+        take: 10,
+      }),
+      
+      // Blog views
+      prisma.blog.findMany({
+        select: {
+          id: true,
+          title: true,
+          views: true,
+        },
+        orderBy: { views: 'desc' },
         take: 10,
       }),
     ]);
 
-    // Calculate growth percentage
-    const previousPeriodStart = new Date(startDate.getTime() - (now.getTime() - startDate.getTime()));
-    const previousPeriodViews = await prisma.pageView.count({
-      where: { 
-        createdAt: { 
-          gte: previousPeriodStart,
-          lt: startDate 
-        } 
-      },
-    });
-
-    const growthPercentage = previousPeriodViews > 0 
-      ? ((periodPageViews - previousPeriodViews) / previousPeriodViews) * 100
+    // Calculate growth percentages
+    const pageViewGrowth = lastMonthPageViews > 0 
+      ? ((thisMonthPageViews - lastMonthPageViews) / lastMonthPageViews) * 100
       : 0;
 
-    // Format daily views data
-    const formattedDailyViews = (dailyViews as any[]).map((day: any) => ({
-      date: day.date,
-      views: parseInt(day.views),
-    }));
+    const weekGrowth = thisWeekPageViews > 0 
+      ? ((thisWeekPageViews - (lastMonthPageViews / 4)) / (lastMonthPageViews / 4)) * 100
+      : 0;
 
-    // Format top pages data
-    const formattedTopPages = topPages.map(page => ({
+    // Format top pages
+    const topPagesData = topPages.map(page => ({
       path: page.path,
       views: page._count.path,
     }));
 
-    // Format referrers data
-    const formattedReferrers = referrers
-      .filter(ref => ref.referrer && ref.referrer !== '')
-      .map(ref => ({
-        referrer: ref.referrer,
-        visits: ref._count.referrer,
-      }));
+    // Format page views by day
+    const pageViewsByDayData = (pageViewsByDay as any[]).map(day => ({
+      date: day.date,
+      views: Number(day.views),
+    }));
+
+    // Format project views
+    const projectViewsData = projectViews.map(project => ({
+      id: project.id,
+      title: project.title,
+      views: project.views,
+    }));
+
+    // Format blog views
+    const blogViewsData = blogViews.map(blog => ({
+      id: blog.id,
+      title: blog.title,
+      views: blog.views,
+    }));
 
     return NextResponse.json({
       success: true,
       analytics: {
-        period,
-        totalPageViews,
-        periodPageViews,
-        uniqueVisitors: uniqueVisitors.length,
-        growthPercentage: Math.round(growthPercentage * 100) / 100,
-        dailyViews: formattedDailyViews,
-        topPages: formattedTopPages,
-        referrers: formattedReferrers,
+        overview: {
+          totalPageViews,
+          thisMonthPageViews,
+          thisWeekPageViews,
+          pageViewGrowth: Math.round(pageViewGrowth * 100) / 100,
+          weekGrowth: Math.round(weekGrowth * 100) / 100,
+          uniqueVisitors: uniqueVisitors.length,
+        },
+        topPages: topPagesData,
+        pageViewsByDay: pageViewsByDayData,
+        topProjects: projectViewsData,
+        topBlogs: blogViewsData,
       },
     });
 

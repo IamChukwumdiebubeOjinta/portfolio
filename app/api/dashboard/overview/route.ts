@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSessionFromRequest, isSessionExpired } from '@/lib/session';
 
+// Force dynamic rendering since this route uses cookies for authentication
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     // Check authentication
@@ -13,308 +16,108 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get current date for calculations
-    const now = new Date();
-    const thisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const thisWeek = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-    const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-
-    // Fetch all dashboard data in parallel
+    // Fetch overview data
     const [
-      // Basic counts
       totalProjects,
-      publishedProjects,
       totalBlogs,
-      publishedBlogs,
       totalContacts,
-      unreadContacts,
-      totalPageViews,
-      thisMonthPageViews,
-      thisWeekPageViews,
-      
-      // Recent data
-      recentProjects,
-      recentBlogs,
-      recentContacts,
-      recentActivities,
-      
-      // Feature settings
-      featureSettings,
-      
-      // Analytics data
-      topPages,
-      uniqueVisitors,
-      
-      // Status breakdowns
-      projectStatusStats,
-      blogStatusStats,
+      recentActivity,
+      projectStats,
+      blogStats,
+      contactStats,
     ] = await Promise.all([
-      // Basic counts
+      // Total counts
       prisma.project.count(),
-      prisma.project.count({ where: { isVisible: true, status: 'PUBLISHED' } }),
       prisma.blog.count(),
-      prisma.blog.count({ where: { isPublished: true, status: 'PUBLISHED' } }),
       prisma.contact.count(),
-      prisma.contact.count({ where: { isRead: false } }),
-      prisma.pageView.count(),
-      prisma.pageView.count({ where: { createdAt: { gte: thisMonth } } }),
-      prisma.pageView.count({ where: { createdAt: { gte: thisWeek } } }),
       
-      // Recent projects
-      prisma.project.findMany({
-        take: 5,
-        orderBy: { updatedAt: 'desc' },
-        select: {
-          id: true,
-          title: true,
-          status: true,
-          isVisible: true,
-          updatedAt: true,
-          views: true,
-        },
-      }),
+      // Recent activity (last 7 days)
+      prisma.$queryRaw`
+        SELECT 
+          'project' as type,
+          id,
+          title,
+          updated_at as date
+        FROM projects 
+        WHERE updated_at >= NOW() - INTERVAL '7 days'
+        UNION ALL
+        SELECT 
+          'blog' as type,
+          id,
+          title,
+          updated_at as date
+        FROM blogs 
+        WHERE updated_at >= NOW() - INTERVAL '7 days'
+        UNION ALL
+        SELECT 
+          'contact' as type,
+          id,
+          name as title,
+          created_at as date
+        FROM contacts 
+        WHERE created_at >= NOW() - INTERVAL '7 days'
+        ORDER BY date DESC
+        LIMIT 10
+      `,
       
-      // Recent blogs
-      prisma.blog.findMany({
-        take: 5,
-        orderBy: { updatedAt: 'desc' },
-        select: {
-          id: true,
-          title: true,
-          status: true,
-          isPublished: true,
-          updatedAt: true,
-          views: true,
-        },
-      }),
-      
-      // Recent contacts
-      prisma.contact.findMany({
-        take: 10,
-        orderBy: { createdAt: 'desc' },
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          subject: true,
-          isRead: true,
-          createdAt: true,
-        },
-      }),
-      
-      // Recent activities
-      prisma.activity.findMany({
-        take: 5,
-        orderBy: { createdAt: 'desc' },
-        include: {
-          user: {
-            select: {
-              username: true,
-            },
-          },
-        },
-      }),
-      
-      // Feature settings
-      prisma.setting.findMany({
-        where: {
-          key: {
-            in: [
-              'blog_enabled',
-              'contact_form_enabled',
-              'testimonials_enabled',
-              'hire_me_banner_enabled',
-            ],
-          },
-        },
-        select: {
-          key: true,
-          value: true,
-          description: true,
-        },
-      }),
-      
-      // Top pages
-      prisma.pageView.groupBy({
-        by: ['path'],
-        _count: { path: true },
-        orderBy: { _count: { path: 'desc' } },
-        take: 10,
-      }),
-      
-      // Unique visitors
-      prisma.pageView.groupBy({
-        by: ['ipAddress'],
-        where: { 
-          createdAt: { gte: thisMonth },
-          ipAddress: { not: null }
-        },
-        _count: { ipAddress: true },
-      }),
-      
-      // Project status stats
+      // Project statistics
       prisma.project.groupBy({
         by: ['status'],
         _count: { status: true },
       }),
       
-      // Blog status stats
+      // Blog statistics
       prisma.blog.groupBy({
         by: ['status'],
         _count: { status: true },
       }),
+      
+      // Contact statistics (read vs unread)
+      prisma.contact.groupBy({
+        by: ['isRead'],
+        _count: { isRead: true },
+      }),
     ]);
 
-    // Calculate growth percentages
-    const lastMonthPageViews = await prisma.pageView.count({
-      where: { 
-        createdAt: { 
-          gte: lastMonth,
-          lt: thisMonth 
-        } 
-      },
-    });
-
-    const pageViewGrowth = lastMonthPageViews > 0 
-      ? ((thisMonthPageViews - lastMonthPageViews) / lastMonthPageViews) * 100
-      : 0;
-
-    // Format stats
-    const stats = [
-      {
-        title: 'Total Projects',
-        value: totalProjects.toString(),
-        change: '+2 this month',
-        icon: 'FolderOpen',
-      },
-      {
-        title: 'Published Projects',
-        value: publishedProjects.toString(),
-        change: `${Math.round((publishedProjects / totalProjects) * 100)}% published`,
-        icon: 'Eye',
-      },
-      {
-        title: 'Blog Posts',
-        value: totalBlogs.toString(),
-        change: '+1 this week',
-        icon: 'FileText',
-      },
-      {
-        title: 'Published Posts',
-        value: publishedBlogs.toString(),
-        change: `${Math.round((publishedBlogs / totalBlogs) * 100)}% published`,
-        icon: 'CheckCircle',
-      },
-      {
-        title: 'Page Views',
-        value: totalPageViews.toLocaleString(),
-        change: `${Math.round(pageViewGrowth * 100) / 100}% this month`,
-        icon: 'TrendingUp',
-      },
-      {
-        title: 'This Month Views',
-        value: thisMonthPageViews.toLocaleString(),
-        change: `${Math.round((thisMonthPageViews / totalPageViews) * 100)}% of total`,
-        icon: 'Calendar',
-      },
-      {
-        title: 'Contact Forms',
-        value: totalContacts.toString(),
-        change: '+5 this week',
-        icon: 'Users',
-      },
-      {
-        title: 'Unread Messages',
-        value: unreadContacts.toString(),
-        change: `${Math.round((unreadContacts / totalContacts) * 100)}% unread`,
-        icon: 'Mail',
-      },
-    ];
-
-    // Format recent data
-    const formattedRecentProjects = recentProjects.map(project => ({
-      id: project.id,
-      title: project.title,
-      status: project.status,
-      isVisible: project.isVisible,
-      updatedAt: project.updatedAt,
-      views: project.views,
-      timeAgo: getTimeAgo(project.updatedAt),
+    // Format recent activity
+    const formattedActivity = (recentActivity as any[]).map(item => ({
+      id: item.id,
+      type: item.type,
+      title: item.title,
+      date: item.date,
+      timeAgo: getTimeAgo(new Date(item.date)),
     }));
 
-    const formattedRecentBlogs = recentBlogs.map(blog => ({
-      id: blog.id,
-      title: blog.title,
-      status: blog.status,
-      isPublished: blog.isPublished,
-      updatedAt: blog.updatedAt,
-      views: blog.views,
-      timeAgo: getTimeAgo(blog.updatedAt),
-    }));
-
-    const formattedRecentContacts = recentContacts.map(contact => ({
-      id: contact.id,
-      name: contact.name,
-      email: contact.email,
-      subject: contact.subject,
-      isRead: contact.isRead,
-      createdAt: contact.createdAt,
-      timeAgo: getTimeAgo(contact.createdAt),
-    }));
-
-    const formattedRecentActivities = recentActivities.map(activity => ({
-      id: activity.id,
-      action: activity.action,
-      item: activity.item,
-      time: activity.createdAt,
-      user: activity.user.username,
-      timeAgo: getTimeAgo(activity.createdAt),
-    }));
-
-    // Format features
-    const features = featureSettings.map(setting => ({
-      name: setting.key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-      enabled: setting.value === 'true',
-      description: setting.description,
-    }));
-
-    // Format analytics
-    const topPagesData = topPages.map(page => ({
-      path: page.path,
-      views: page._count.path,
-    }));
-
-    // Format status stats
-    const projectStatusData = projectStatusStats.reduce((acc, stat) => {
+    // Calculate project stats
+    const projectStatusStats = projectStats.reduce((acc, stat) => {
       acc[stat.status.toLowerCase()] = stat._count.status;
       return acc;
     }, {} as Record<string, number>);
 
-    const blogStatusData = blogStatusStats.reduce((acc, stat) => {
+    // Calculate blog stats
+    const blogStatusStats = blogStats.reduce((acc, stat) => {
       acc[stat.status.toLowerCase()] = stat._count.status;
+      return acc;
+    }, {} as Record<string, number>);
+
+    // Calculate contact stats
+    const contactReadStats = contactStats.reduce((acc, stat) => {
+      acc[stat.isRead ? 'read' : 'unread'] = stat._count.isRead;
       return acc;
     }, {} as Record<string, number>);
 
     return NextResponse.json({
       success: true,
-      dashboard: {
-        stats,
-        recentProjects: formattedRecentProjects,
-        recentBlogs: formattedRecentBlogs,
-        recentContacts: formattedRecentContacts,
-        recentActivities: formattedRecentActivities,
-        features,
-        analytics: {
-          topPages: topPagesData,
-          uniqueVisitors: uniqueVisitors.length,
-          totalPageViews,
-          thisMonthPageViews,
-          pageViewGrowth: Math.round(pageViewGrowth * 100) / 100,
+      overview: {
+        totals: {
+          projects: totalProjects,
+          blogs: totalBlogs,
+          contacts: totalContacts,
         },
-        statusStats: {
-          projects: projectStatusData,
-          blogs: blogStatusData,
-        },
+        recentActivity: formattedActivity,
+        projectStats: projectStatusStats,
+        blogStats: blogStatusStats,
+        contactStats: contactReadStats,
       },
     });
 
