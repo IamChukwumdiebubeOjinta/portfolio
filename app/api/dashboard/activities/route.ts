@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
 import { getSessionFromRequest, isSessionExpired } from '@/lib/session';
+import { prisma } from '@/lib/prisma';
+
+// Force dynamic rendering since this route uses cookies for authentication
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,70 +16,32 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '10');
-    const type = searchParams.get('type');
-    const userId = searchParams.get('userId');
-
-    const skip = (page - 1) * limit;
-
-    // Build where clause
-    const where: any = {};
-    if (type) {
-      where.type = type;
-    }
-    if (userId) {
-      where.userId = userId;
-    }
-
-    // Fetch activities with pagination
-    const [activities, total] = await Promise.all([
-      prisma.activity.findMany({
-        where,
-        skip,
-        take: limit,
-        orderBy: { createdAt: 'desc' },
-        include: {
-          user: {
-            select: {
-              id: true,
-              username: true,
-              email: true,
-            },
+    // Fetch recent activities
+    const activities = await prisma.activity.findMany({
+      take: 20,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        user: {
+          select: {
+            username: true,
           },
         },
-      }),
-      prisma.activity.count({ where }),
-    ]);
+      },
+    });
 
-    // Format activities for frontend
+    // Format activities
     const formattedActivities = activities.map(activity => ({
       id: activity.id,
       action: activity.action,
       item: activity.item,
-      details: activity.details,
-      type: activity.type,
-      createdAt: activity.createdAt,
-      user: {
-        id: activity.user.id,
-        username: activity.user.username,
-        email: activity.user.email,
-      },
+      time: activity.createdAt,
+      user: activity.user.username,
       timeAgo: getTimeAgo(activity.createdAt),
     }));
 
     return NextResponse.json({
       success: true,
       activities: formattedActivities,
-      pagination: {
-        page,
-        limit,
-        total,
-        totalPages: Math.ceil(total / limit),
-        hasNext: page * limit < total,
-        hasPrev: page > 1,
-      },
     });
 
   } catch (error) {

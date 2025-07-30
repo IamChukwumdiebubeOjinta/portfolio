@@ -3,6 +3,9 @@ import { compare } from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
 import { createSession } from '@/lib/session';
 
+// Force dynamic rendering since this route uses cookies for authentication
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const { username, password }: { username: string; password: string } =
