@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import LayoutShell from '@/components/shared/LayoutShell';
 import { Toaster } from '@/components/ui/toaster';
 import { inter, spaceGrotesk } from '@/lib/fonts';
+import ErrorBoundary from '@/components/error-boundary';
 
 export const metadata: Metadata = {
   title: 'Chukwumdiebube Ojinta - Full-Stack Engineer & AI Systems Architect',
@@ -34,15 +35,17 @@ export default function RootLayout({
   return (
     <html lang='en' suppressHydrationWarning>
       <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans`}>
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='dark'
-          enableSystem
-          disableTransitionOnChange
-        >
-          <LayoutShell>{children}</LayoutShell>
-          <Toaster />
-        </ThemeProvider>
+        <ErrorBoundary>
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='dark'
+            enableSystem
+            disableTransitionOnChange
+          >
+            <LayoutShell>{children}</LayoutShell>
+            <Toaster />
+          </ThemeProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );

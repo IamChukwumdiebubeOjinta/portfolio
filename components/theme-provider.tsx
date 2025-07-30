@@ -7,5 +7,23 @@ import {
 } from 'next-themes';
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
-  return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Prevent hydration mismatch by not rendering theme provider until mounted
+  if (!mounted) {
+    return <>{children}</>;
+  }
+
+  // Wrap in error boundary to catch any context-related errors
+  try {
+    return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
+  } catch (error) {
+    console.error('Theme provider error:', error);
+    // Fallback to rendering children without theme provider
+    return <>{children}</>;
+  }
 }
