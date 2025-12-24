@@ -6,8 +6,6 @@ import { ContactNotificationEmail, ContactConfirmationEmail } from '@/components
 import { render } from '@react-email/components';
 import { config } from '@/lib/config';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 // Validation schema
 const contactSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100, 'Name is too long'),
@@ -19,6 +17,8 @@ const contactSchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    const hasResendApiKey = Boolean(process.env.RESEND_API_KEY);
+    const resend = hasResendApiKey ? new Resend(process.env.RESEND_API_KEY) : null;
     
     // Validate input
     const validatedData = contactSchema.parse(body);
@@ -55,53 +55,96 @@ export async function POST(request: NextRequest) {
     }
 
     const timestamp = new Date().toLocaleString();
+    let emailSendFailed = false;
+    const deliveryNotes: string[] = [];
 
-    // Send notification email to you (site owner)
-    const ownerEmail = config.contact.email;
-    const notificationEmailHtml = await render(
-      ContactNotificationEmail({
-        name,
-        email,
-        subject,
-        message,
-        timestamp,
-      })
-    );
+    if (!hasResendApiKey) {
+      emailSendFailed = true;
+      const warningMessage = 'RESEND_API_KEY is not configured; skipping email delivery.';
+      deliveryNotes.push(warningMessage);
+      console.warn(warningMessage);
+    } else if (resend) {
+      // Send notification email to you (site owner)
+      const ownerEmail = config.contact.email;
+      try {
+        const notificationEmailHtml = await render(
+          ContactNotificationEmail({
+            name,
+            email,
+            subject,
+            message,
+            timestamp,
+          })
+        );
 
-    await resend.emails.send({
-      from: 'Portfolio Contact <noreply@ojinta.dev>',
-      to: [ownerEmail],
-      subject: `New Contact Message: ${subject}`,
-      html: notificationEmailHtml,
-    });
+        await resend.emails.send({
+          from: 'Portfolio Contact <noreply@ojinta.dev>',
+          to: [ownerEmail],
+          subject: `New Contact Message: ${subject}`,
+          html: notificationEmailHtml,
+        });
+      } catch (error) {
+        emailSendFailed = true;
+        const errorMessage = 'Failed to send contact notification email';
+        deliveryNotes.push(errorMessage);
+        console.error(errorMessage, error);
+      }
 
-    // Send confirmation email to the user
-    const confirmationEmailHtml = await render(
-      ContactConfirmationEmail({
-        name,
-        subject,
-        message,
-        timestamp,
-      })
-    );
+      // Send confirmation email to the user
+      try {
+        const confirmationEmailHtml = await render(
+          ContactConfirmationEmail({
+            name,
+            subject,
+            message,
+            timestamp,
+          })
+        );
 
-    await resend.emails.send({
-      from: 'Ebube Ojinta <noreply@ojinta.dev>',
-      to: [email],
-      subject: 'Thank you for reaching out!',
-      html: confirmationEmailHtml,
-    });
+        await resend.emails.send({
+          from: 'Ebube Ojinta <noreply@ojinta.dev>',
+          to: [email],
+          subject: 'Thank you for reaching out!',
+          html: confirmationEmailHtml,
+        });
+      } catch (error) {
+        emailSendFailed = true;
+        const errorMessage = 'Failed to send contact confirmation email';
+        deliveryNotes.push(errorMessage);
+        console.error(errorMessage, error);
+      }
+    }
 
-    return NextResponse.json({
-      success: true,
-      message: 'Message sent successfully! Check your email for confirmation.',
-      data: {
-        id: contact.id,
-        name,
-        email,
-        subject,
+    if (emailSendFailed) {
+      return NextResponse.json(
+        {
+          success: true,
+          message: 'Message received; email delivery pending or failed.',
+          deliveryNotes,
+          data: {
+            id: contact.id,
+            name,
+            email,
+            subject,
+          },
+        },
+        { status: 202 }
+      );
+    }
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: 'Message sent successfully! Check your email for confirmation.',
+        data: {
+          id: contact.id,
+          name,
+          email,
+          subject,
+        },
       },
-    });
+      { status: 200 }
+    );
 
   } catch (error) {
     console.error('Contact form error:', error);
@@ -121,4 +164,4 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
-} 
+}
