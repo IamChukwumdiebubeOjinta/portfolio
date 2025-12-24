@@ -85,6 +85,8 @@ export function Contact() {
   const recipient = config.contact.email;
   const subject = config.contact.subject;
   const body = config.contact.body;
+  const encodedSubject = encodeURIComponent(subject);
+  const encodedBody = encodeURIComponent(body);
 
   return (
     <section id='contact' className='py-20 px-4 bg-muted/30'>
@@ -216,7 +218,7 @@ export function Contact() {
                   respond as soon as possible.
                 </p>
                 <Button variant='outline' className='w-full bg-transparent' onClick={() => {
-                  window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+                  window.location.href = `mailto:${recipient}?subject=${encodedSubject}&body=${encodedBody}`;
                 }}>
                   {config.personal.email}
                 </Button>
