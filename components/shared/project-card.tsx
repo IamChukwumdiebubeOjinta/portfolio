@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ExternalLink, Play, Github } from 'lucide-react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 type ProjectCardProps = {
   title: string;
@@ -38,9 +39,12 @@ export function ProjectCard({
     >
       <Card className='overflow-hidden hover:shadow-xl transition-all duration-300 group h-full'>
         <div className='relative overflow-hidden'>
-          <img
+          <Image
             src={image || '/placeholder.svg'}
-            alt={title}
+            alt={`${title} preview`}
+            width={1200}
+            height={600}
+            sizes='(min-width: 1280px) 400px, (min-width: 1024px) 360px, (min-width: 768px) 50vw, 100vw'
             className='w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300'
           />
           <div className='absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center'>
