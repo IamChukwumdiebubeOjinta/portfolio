@@ -32,21 +32,25 @@ export function ProjectCard({
 }: ProjectCardProps) {
   return (
     <motion.div
+      className='project-card [transform-style:preserve-3d]'
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       viewport={{ once: true }}
+      whileHover={{ rotateX: -2, rotateY: 3, translateY: -6 }}
+      style={{ perspective: 1200 }}
     >
-      <Card className='overflow-hidden hover:shadow-xl transition-all duration-300 group h-full'>
-        <div className='relative overflow-hidden'>
+      <Card className='overflow-hidden hover:shadow-xl transition-all duration-500 group h-full bg-card/80 backdrop-blur border border-white/10'>
+        <div className='project-media relative overflow-hidden'>
           <Image
             src={image || '/placeholder.svg'}
             alt={`${title} preview`}
             width={1200}
             height={600}
             sizes='(min-width: 1280px) 400px, (min-width: 1024px) 360px, (min-width: 768px) 50vw, 100vw'
-            className='w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300'
+            className='project-img w-full h-48 object-cover transition-transform duration-700 ease-out group-hover:scale-110'
           />
+          <div className='absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-60 transition-opacity duration-700' />
           <div className='absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center'>
             {demoUrl ? (
               <Button size='sm' className='gap-2' asChild>

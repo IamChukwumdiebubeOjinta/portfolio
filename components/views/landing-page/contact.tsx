@@ -89,7 +89,7 @@ export function Contact() {
   const encodedBody = encodeURIComponent(body);
 
   return (
-    <section id='contact' className='py-20 px-4 bg-muted/30'>
+    <section id='contact' className='reveal py-20 px-4 bg-muted/30'>
       <div className='max-w-4xl mx-auto'>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -102,6 +102,9 @@ export function Contact() {
           <p className='text-lg text-muted-foreground max-w-2xl mx-auto'>
             Ready to build something amazing together? Let's discuss your next
             project.
+          </p>
+          <p className='text-sm text-muted-foreground'>
+            Response time: &lt; 24–48 hrs
           </p>
         </motion.div>
 
@@ -221,6 +224,13 @@ export function Contact() {
                   window.location.href = `mailto:${recipient}?subject=${encodedSubject}&body=${encodedBody}`;
                 }}>
                   {config.personal.email}
+                </Button>
+                <Button
+                  variant='default'
+                  className='w-full mt-3'
+                  onClick={() => window.open('https://calendly.com/ebube-ojinta/15min', '_blank')}
+                >
+                  Book a 15-min chat
                 </Button>
               </CardContent>
             </Card>

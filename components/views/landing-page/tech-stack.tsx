@@ -128,7 +128,7 @@ export function TechStack() {
   const hasMoreItems = technologies.length > INITIAL_ITEMS_COUNT;
 
   return (
-    <section id='tech-stack' className='py-20 px-4 bg-muted/30'>
+    <section id='tech-stack' className='reveal py-20 px-4 bg-muted/30'>
       <div className='max-w-6xl mx-auto'>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -137,13 +137,34 @@ export function TechStack() {
           viewport={{ once: true }}
           className='text-center mb-16'
         >
-          <h2 className='text-3xl md:text-4xl font-bold mb-4'>
-            The skills, tools and technologies I really enjoy working with
+          <h2 className='text-3xl md:text-4xl font-bold mb-3'>
+            Stack I ship with
           </h2>
           <p className='text-lg text-muted-foreground max-w-2xl mx-auto'>
             A curated selection of technologies I use to bring ideas to life
           </p>
         </motion.div>
+
+        <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mb-10'>
+          <div className='rounded-xl border border-border p-4 bg-card/70 backdrop-blur text-left'>
+            <div className='text-sm font-semibold text-primary mb-1'>AI</div>
+            <p className='text-sm text-muted-foreground'>
+              Vercel AI SDK, LangChain, vector search, prompt pipelines with guardrails.
+            </p>
+          </div>
+          <div className='rounded-xl border border-border p-4 bg-card/70 backdrop-blur text-left'>
+            <div className='text-sm font-semibold text-primary mb-1'>Infra</div>
+            <p className='text-sm text-muted-foreground'>
+              BullMQ workers, Dockerized services, observability with Sentry + Grafana.
+            </p>
+          </div>
+          <div className='rounded-xl border border-border p-4 bg-card/70 backdrop-blur text-left'>
+            <div className='text-sm font-semibold text-primary mb-1'>Web</div>
+            <p className='text-sm text-muted-foreground'>
+              Next.js/Remix full-stack, performant UI systems, accessibility, streaming UX.
+            </p>
+          </div>
+        </div>
 
         <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6'>
           <AnimatePresence>
