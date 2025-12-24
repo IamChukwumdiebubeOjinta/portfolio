@@ -7,6 +7,23 @@ import Image from 'next/image';
 import { config } from '@/lib/config';
 
 const profilePicture = '/images/profile/ebube-headshot.jpg';
+const proofPoints = [
+  {
+    title: 'Shipped AI chat with streaming + memory',
+    metric: '15k+ conversation events/week',
+    detail: 'Uloma AI companion running on queues + vector search',
+  },
+  {
+    title: 'Reduced API latency by 35%',
+    metric: 'P95 down to 420ms',
+    detail: 'Queue backpressure, edge caching, and connection pooling',
+  },
+  {
+    title: 'Full product delivery',
+    metric: 'Design → build → launch',
+    detail: 'Next.js, Remix, FastAPI, BullMQ, Docker, observability',
+  },
+];
 
 export function Hero() {
   return (
@@ -101,6 +118,38 @@ export function Hero() {
             </motion.div>
 
             <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className='mb-10'
+            >
+              <div className='flex items-center gap-3 mb-3'>
+                <div className='px-3 py-1 rounded-full bg-primary/10 text-xs font-semibold text-primary border border-primary/20'>
+                  Proof
+                </div>
+                <p className='text-sm text-muted-foreground'>
+                  Results from shipped systems, backed by real metrics
+                </p>
+              </div>
+              <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3'>
+                {proofPoints.map(point => (
+                  <div
+                    key={point.title}
+                    className='p-4 rounded-xl border border-white/5 bg-gradient-to-br from-background/60 via-background/40 to-primary/5 shadow-sm backdrop-blur hover:-translate-y-0.5 transition-transform hover:border-primary/30'
+                  >
+                    <div className='text-xs uppercase tracking-wide text-primary font-semibold mb-1'>
+                      {point.metric}
+                    </div>
+                    <div className='font-semibold mb-1'>{point.title}</div>
+                    <p className='text-sm text-muted-foreground leading-relaxed'>
+                      {point.detail}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            <motion.div
               className='flex justify-center gap-6'
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -120,7 +169,7 @@ export function Hero() {
                 className='hover:text-primary hover:bg-primary/10 transition-chelsea'
                 onClick={() => window.open(config.social.linkedin, '_blank')}
               >
-                <Linkedin className='h-5 w-5' />  
+                <Linkedin className='h-5 w-5' />
               </Button>
               <Button
                 variant='ghost'
