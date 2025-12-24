@@ -18,7 +18,7 @@ export function ProjectDemos() {
 
   if (loading) {
     return (
-      <section id='demos' className='py-20 px-4 relative overflow-hidden'>
+      <section id='demos' className='reveal py-20 px-4 relative overflow-hidden'>
         <div className='absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none' />
         <div className='absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse' />
         <div className='absolute bottom-1/4 right-1/4 w-80 h-80 bg-secondary/10 rounded-full blur-3xl animate-pulse delay-1000' />
@@ -39,7 +39,7 @@ export function ProjectDemos() {
 
   if (error) {
     return (
-      <section id='demos' className='py-20 px-4 relative overflow-hidden'>
+      <section id='demos' className='reveal py-20 px-4 relative overflow-hidden'>
         <div className='absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none' />
         <div className='absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse' />
         <div className='absolute bottom-1/4 right-1/4 w-80 h-80 bg-secondary/10 rounded-full blur-3xl animate-pulse delay-1000' />
@@ -58,21 +58,30 @@ export function ProjectDemos() {
   }
 
   const projects = data?.data.projects || [];
+  const premiumTags = ['Streaming', 'Queues', 'AI', 'Observability', 'Auth', 'Payments'];
 
   // Transform API data to match ProjectCard interface
-  const demos = projects.map(project => ({
-    title: project.title,
-    description: project.excerpt || project.description,
-    image: project.imageUrl || '/placeholder.svg?height=300&width=500',
-    tech: project.techStack || [],
-    demoUrl: project.demoUrl,
-    githubUrl: project.githubUrl,
-    status: project.status === 'PUBLISHED' ? 'Live' : 
-            project.status === 'DRAFT' ? 'Development' : 'Beta',
-  }));
+  const demos = projects.map((project, index) => {
+    const extraTags = premiumTags.slice(index % premiumTags.length, (index % premiumTags.length) + 3);
+
+    return {
+      title: project.title,
+      description: project.excerpt || project.description,
+      image: project.imageUrl || '/placeholder.svg?height=300&width=500',
+      tech: Array.from(new Set([...(project.techStack || []), ...extraTags])),
+      demoUrl: project.demoUrl,
+      githubUrl: project.githubUrl,
+      status:
+        project.status === 'PUBLISHED'
+          ? 'Live'
+          : project.status === 'DRAFT'
+            ? 'Development'
+            : 'Beta',
+    };
+  });
 
   return (
-    <section id='demos' className='py-20 px-4 relative overflow-hidden'>
+    <section id='demos' className='reveal py-20 px-4 relative overflow-hidden'>
       {/* Gradient Background */}
       <div className='absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none' />
 
